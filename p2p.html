@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周庄捏瓜子游戏 - 双人版</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .pile {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .ball {
+            width: 30px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: #f00;
+        }
+
+        button {
+            margin: 10px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>周庄捏瓜子游戏 - 双人版</h1>
+    <p>当前玩家：<span id="current-player">玩家 A</span></p>
+    <div id="pile1" class="pile"></div>
+    <div id="pile2" class="pile"></div>
+    <button onclick="confirmRemoval()" id="confirm-button">确认移除</button>
+    <p id="message"></p>
+
+    <script>
+        // 随机生成两堆小球的初始数量
+        let pile1Count = Math.floor(Math.random() * 10) + 2;
+        let pile2Count = Math.floor(Math.random() * 10) + 2;
+        let currentPlayer = 'A';
+        let selectedBalls = [];
+
+        // 创建小球元素并添加到堆容器中
+        function createPiles() {
+            const pile1 = document.getElementById('pile1');
+            const pile2 = document.getElementById('pile2');
+
+            for (let i = 0; i < pile1Count; i++) {
+                const ball = document.createElement('div');
+                ball.classList.add('ball');
+                ball.dataset.pile = 1;
+                ball.addEventListener('click', selectBall);
+                pile1.appendChild(ball);
+            }
+
+            for (let i = 0; i < pile2Count; i++) {
+                const ball = document.createElement('div');
+                ball.classList.add('ball');
+                ball.dataset.pile = 2;
+                ball.addEventListener('click', selectBall);
+                pile2.appendChild(ball);
+            }
+        }
+
+        // 处理小球的点击事件
+        function selectBall() {
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                const index = selectedBalls.indexOf(this);
+                if (index > -1) {
+                    selectedBalls.splice(index, 1);
+                }
+            } else {
+                this.classList.add('selected');
+                selectedBalls.push(this);
+            }
+        }
+
+        // 确认移除小球的函数
+        function confirmRemoval() {
+            if (selectedBalls.length === 0) {
+                document.getElementById('message').textContent = '请至少选择一个小球移除';
+                return;
+            }
+
+            const pile = selectedBalls[0].dataset.pile;
+            for (let i = 0; i < selectedBalls.length; i++) {
+                if (selectedBalls[i].dataset.pile != pile) {
+                    document.getElementById('message').textContent = '不能跨堆移除小球';
+                    selectedBalls.forEach(ball => ball.classList.remove('selected'));
+                    selectedBalls = [];
+                    return;
+                }
+            }
+
+            if (pile === '1') {
+                pile1Count -= selectedBalls.length;
+            } else {
+                pile2Count -= selectedBalls.length;
+            }
+
+            selectedBalls.forEach(ball => ball.remove());
+            selectedBalls = [];
+
+            // 判断游戏是否结束
+            if (pile1Count === 0 && pile2Count === 0) {
+                const loser = currentPlayer;
+                const winner = loser === 'A' ? 'B' : 'A';
+                document.getElementById('message').textContent = `玩家 ${loser} 输了，玩家 ${winner} 赢了！`;
+                document.getElementById('confirm-button').disabled = true;
+            } else {
+                // 切换玩家
+                currentPlayer = currentPlayer === 'A' ? 'B' : 'A';
+                document.getElementById('current-player').textContent = `玩家 ${currentPlayer}`;
+                document.getElementById('message').textContent = '';
+            }
+        }
+
+        // 初始化页面
+        createPiles();
+    </script>
+</body>
+
+</html>
