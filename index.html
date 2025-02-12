@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周庄捏瓜子游戏 - 人机对战</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .pile {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .ball {
+            width: 30px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: #f00;
+        }
+
+        button {
+            margin: 10px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>小球移除游戏 - 人机对战</h1>
+    <p>当前玩家：<span id="current-player">玩家</span></p>
+    <div id="pile1" class="pile"></div>
+    <div id="pile2" class="pile"></div>
+    <button onclick="confirmRemoval()" id="confirm-button">确认移除</button>
+    <p id="message"></p>
+    <p id="strategy"></p>
+
+    <script>
+        // 随机生成两堆小球的初始数量
+        let pile1Count = Math.floor(Math.random() * 10) + 2;
+        let pile2Count = Math.floor(Math.random() * 10) + 2;
+        let isPlayerTurn = true;
+        let selectedBalls = [];
+
+        // 创建小球元素并添加到堆容器中
+        function createPiles() {
+            const pile1 = document.getElementById('pile1');
+            const pile2 = document.getElementById('pile2');
+
+            for (let i = 0; i < pile1Count; i++) {
+                const ball = document.createElement('div');
+                ball.classList.add('ball');
+                ball.dataset.pile = 1;
+                ball.addEventListener('click', selectBall);
+                pile1.appendChild(ball);
+            }
+
+            for (let i = 0; i < pile2Count; i++) {
+                const ball = document.createElement('div');
+                ball.classList.add('ball');
+                ball.dataset.pile = 2;
+                ball.addEventListener('click', selectBall);
+                pile2.appendChild(ball);
+            }
+
+            showWinningStrategy();
+        }
+
+        // 处理小球的点击事件
+        function selectBall() {
+            if (!isPlayerTurn) return;
+
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                const index = selectedBalls.indexOf(this);
+                if (index > -1) {
+                    selectedBalls.splice(index, 1);
+                }
+            } else {
+                this.classList.add('selected');
+                selectedBalls.push(this);
+            }
+        }
+
+        // 确认移除小球的函数
+        function confirmRemoval() {
+            if (!isPlayerTurn) return;
+
+            if (selectedBalls.length === 0) {
+                document.getElementById('message').textContent = '请至少选择一个小球移除';
+                return;
+            }
+
+            const pile = selectedBalls[0].dataset.pile;
+            for (let i = 0; i < selectedBalls.length; i++) {
+                if (selectedBalls[i].dataset.pile != pile) {
+                    document.getElementById('message').textContent = '不能跨堆移除小球';
+                    selectedBalls.forEach(ball => ball.classList.remove('selected'));
+                    selectedBalls = [];
+                    return;
+                }
+            }
+
+            if (pile === '1') {
+                pile1Count -= selectedBalls.length;
+            } else {
+                pile2Count -= selectedBalls.length;
+            }
+
+            selectedBalls.forEach(ball => ball.remove());
+            selectedBalls = [];
+
+            // 判断游戏是否结束
+            if (pile1Count === 0 && pile2Count === 0) {
+                document.getElementById('message').textContent = '你输了！';
+                document.getElementById('confirm-button').disabled = true;
+            } else {
+                // 切换到计算机回合
+                isPlayerTurn = false;
+                document.getElementById('current-player').textContent = '计算机';
+                document.getElementById('message').textContent = '计算机正在思考...';
+                setTimeout(computerTurn, 1000);
+            }
+        }
+
+        // 计算机回合
+        function computerTurn() {
+            let removeCount;
+            let pileToRemoveFrom;
+
+            // 处理有一堆为 1 个球的特殊情况
+            if (pile1Count === 1 || pile2Count === 1) {
+                if (pile1Count === 1) {
+                    pileToRemoveFrom = 2;
+                    removeCount = pile2Count; // 移除另一堆所有小球
+                } else {
+                    pileToRemoveFrom = 1;
+                    removeCount = pile1Count; // 移除另一堆所有小球
+                }
+            } else {
+                // 正常情况，使两堆数量相等
+                if (pile1Count === pile2Count) {
+                    // 如果两堆数量相等，随机选择一堆移除 1 个
+                    pileToRemoveFrom = Math.random() < 0.5 ? 1 : 2;
+                    removeCount = 1;
+                } else {
+                    const diff = Math.abs(pile1Count - pile2Count);
+                    if (pile1Count > pile2Count) {
+                        pileToRemoveFrom = 1;
+                        removeCount = diff;
+                    } else {
+                        pileToRemoveFrom = 2;
+                        removeCount = diff;
+                    }
+                }
+            }
+
+            if (removeCount > 0) {
+                if (pileToRemoveFrom === 1) {
+                    const ballsToRemove = Array.from(document.querySelectorAll('#pile1 .ball')).slice(0, removeCount);
+                    pile1Count -= removeCount;
+                    ballsToRemove.forEach(ball => ball.remove());
+                } else {
+                    const ballsToRemove = Array.from(document.querySelectorAll('#pile2 .ball')).slice(0, removeCount);
+                    pile2Count -= removeCount;
+                    ballsToRemove.forEach(ball => ball.remove());
+                }
+            }
+
+            // 判断游戏是否结束
+            if (pile1Count === 0 && pile2Count === 0) {
+                document.getElementById('message').textContent = '你赢了！';
+                document.getElementById('confirm-button').disabled = true;
+            } else {
+                // 切换到玩家回合
+                isPlayerTurn = true;
+                document.getElementById('current-player').textContent = '玩家';
+                document.getElementById('message').textContent = '';
+                showWinningStrategy();
+            }
+        }
+
+        // 显示必胜策略提示
+        function showWinningStrategy() {
+            if (pile1Count === pile2Count) {
+                if (isPlayerTurn) {
+                    document.getElementById('strategy').textContent = '当前两堆数量相等，小心计算机模仿你的操作。';
+                } else {
+                    document.getElementById('strategy').textContent = '计算机可模仿你的操作保持两堆数量相等。';
+                }
+            } else {
+                if (isPlayerTurn) {
+                    document.getElementById('strategy').textContent = '当前两堆数量不等，你可使两堆数量相等后应对计算机。';
+                } else {
+                    document.getElementById('strategy').textContent = '计算机将使两堆数量相等。';
+                }
+            }
+        }
+
+        // 初始化页面
+        createPiles();
+    </script>
+</body>
+
+</html>
