@@ -10,6 +10,9 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
+            color: #61dafb; /* 修改文字颜色 */
+            background-size: cover;
+            background-position: center;
         }
 
         .pile {
@@ -32,9 +35,54 @@
             background-color: #f00;
         }
 
+        .separator {
+            width: 100%;
+            height: 5px; /* 增加高度 */
+            background: linear-gradient(90deg, #61dafb, #282c34); /* 渐变背景 */
+            margin: 20px 0;
+            border-top: 2px dashed #61dafb; /* 添加虚线 */
+            background: none; /* 删除:background: linear-gradient(90deg, #61dafb, #282c34); */
+        }
+
         button {
             margin: 10px;
-            padding: 5px 10px;
+            padding: 10px 20px;
+            background-color: #61dafb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:active {
+            background-color: #3700b3;
+        }
+
+        h1 {
+            color: #61dafb; /* 修改标题颜色 */
+        }
+
+        p {
+            color: #999; /* 修改段落颜色 */
+        }
+
+        .win-message, .lose-message {
+            font-family: '楷体', STKaiti, sans-serif;
+            font-size: 30px;
+            color: #61dafb;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -43,9 +91,12 @@
     <h1>周庄捏瓜子游戏 - 双人版</h1>
     <p>当前玩家：<span id="current-player">玩家 A</span></p>
     <div id="pile1" class="pile"></div>
+    <div class="separator"></div>
     <div id="pile2" class="pile"></div>
     <button onclick="confirmRemoval()" id="confirm-button">确认移除</button>
     <p id="message"></p>
+    <div id="win-message" class="win-message">你赢了！</div>
+    <div id="lose-message" class="lose-message">你输了！</div>
 
     <script>
         // 随机生成两堆小球的初始数量
@@ -88,6 +139,10 @@
                 this.classList.add('selected');
                 selectedBalls.push(this);
             }
+            // 强制重绘
+            this.style.display = 'none';
+            this.offsetHeight; // 触发重绘
+            this.style.display = '';
         }
 
         // 确认移除小球的函数
@@ -116,12 +171,22 @@
             selectedBalls.forEach(ball => ball.remove());
             selectedBalls = [];
 
+            // 强制重绘按钮样式
+            const confirmButton = document.getElementById('confirm-button');
+            confirmButton.disabled = true;
+            confirmButton.disabled = false;
+
             // 判断游戏是否结束
             if (pile1Count === 0 && pile2Count === 0) {
                 const loser = currentPlayer;
                 const winner = loser === 'A' ? 'B' : 'A';
                 document.getElementById('message').textContent = `玩家 ${loser} 输了，玩家 ${winner} 赢了！`;
-                document.getElementById('confirm-button').disabled = true;
+                confirmButton.disabled = true;
+                if (loser === 'A') {
+                    document.getElementById('lose-message').style.display = 'block'; // 显示“你输了”消息
+                } else {
+                    document.getElementById('win-message').style.display = 'block'; // 显示“你赢了”消息
+                }
             } else {
                 // 切换玩家
                 currentPlayer = currentPlayer === 'A' ? 'B' : 'A';
@@ -132,7 +197,35 @@
 
         // 初始化页面
         createPiles();
+
+        // 添加 touchstart 事件监听器
+        document.body.addEventListener('touchstart', function() {
+            const winMessage = document.getElementById('win-message');
+            const loseMessage = document.getElementById('lose-message');
+            if (winMessage.style.display === 'block' || loseMessage.style.display === 'block') {
+                resetGame();
+            }
+        });
+
+        function resetGame() {
+            // 重置游戏状态
+            pile1Count = Math.floor(Math.random() * 10) + 2;
+            pile2Count = Math.floor(Math.random() * 10) + 2;
+            currentPlayer = 'A';
+            selectedBalls = [];
+            document.getElementById('confirm-button').disabled = false;
+            document.getElementById('pile1').innerHTML = '';
+            document.getElementById('pile2').innerHTML = '';
+            document.getElementById('message').textContent = '';
+            document.getElementById('win-message').style.display = 'none';
+            document.getElementById('lose-message').style.display = 'none';
+            document.getElementById('current-player').textContent = '玩家 A';
+            createPiles();
+        }
     </script>
 </body>
 
 </html>
+
+
+

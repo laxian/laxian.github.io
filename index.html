@@ -10,6 +10,9 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
+            color: #61dafb; /* 修改文字颜色 */
+            background-size: cover;
+            background-position: center;
         }
 
         .pile {
@@ -32,9 +35,54 @@
             background-color: #f00;
         }
 
+        .separator {
+            width: 100%;
+            height: 5px; /* 增加高度 */
+            background: linear-gradient(90deg, #61dafb, #282c34); /* 渐变背景 */
+            margin: 20px 0;
+            border-top: 2px dashed #61dafb; /* 添加虚线 */
+            background: none; /* 删除:background: linear-gradient(90deg, #61dafb, #282c34); */
+        }
+
         button {
             margin: 10px;
-            padding: 5px 10px;
+            padding: 10px 20px;
+            background-color: #61dafb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:active {
+            background-color: #3700b3;
+        }
+
+        h1 {
+            color: #61dafb; /* 修改标题颜色 */
+        }
+
+        p {
+            color: #999; /* 修改段落颜色 */
+        }
+
+        .win-message, .lose-message {
+            font-family: '楷体', STKaiti, sans-serif;
+            font-size: 50px;
+            color: #61dafb;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -43,10 +91,13 @@
     <h1>周庄捏瓜子游戏 - 人机对战</h1>
     <p>当前玩家：<span id="current-player">玩家</span></p>
     <div id="pile1" class="pile"></div>
+    <div class="separator"></div>
     <div id="pile2" class="pile"></div>
     <button onclick="confirmRemoval()" id="confirm-button">确认移除</button>
     <p id="message"></p>
     <p id="strategy"></p>
+    <div id="win-message" class="win-message">你赢了！</div>
+    <div id="lose-message" class="lose-message">你输了！</div>
 
     <script>
         // 随机生成两堆小球的初始数量
@@ -81,8 +132,6 @@
 
         // 处理小球的点击事件
         function selectBall() {
-            if (!isPlayerTurn) return;
-
             if (this.classList.contains('selected')) {
                 this.classList.remove('selected');
                 const index = selectedBalls.indexOf(this);
@@ -93,46 +142,61 @@
                 this.classList.add('selected');
                 selectedBalls.push(this);
             }
+            // 强制重绘
+            this.style.display = 'none';
+            this.offsetHeight; // 触发重绘
+            this.style.display = '';
         }
 
         // 确认移除小球的函数
         function confirmRemoval() {
-            if (!isPlayerTurn) return;
+            if (document.getElementById('win-message').style.display === 'block' || document.getElementById('lose-message').style.display === 'block') {
+                resetGame();
+            } else {
+                // 原始 confirmRemoval 逻辑
+                if (!isPlayerTurn) return;
 
-            if (selectedBalls.length === 0) {
-                document.getElementById('message').textContent = '请至少选择一个小球移除';
-                return;
-            }
-
-            const pile = selectedBalls[0].dataset.pile;
-            for (let i = 0; i < selectedBalls.length; i++) {
-                if (selectedBalls[i].dataset.pile != pile) {
-                    document.getElementById('message').textContent = '不能跨堆移除小球';
-                    selectedBalls.forEach(ball => ball.classList.remove('selected'));
-                    selectedBalls = [];
+                if (selectedBalls.length === 0) {
+                    document.getElementById('message').textContent = '请至少选择一个小球移除';
                     return;
                 }
-            }
 
-            if (pile === '1') {
-                pile1Count -= selectedBalls.length;
-            } else {
-                pile2Count -= selectedBalls.length;
-            }
+                const pile = selectedBalls[0].dataset.pile;
+                for (let i = 0; i < selectedBalls.length; i++) {
+                    if (selectedBalls[i].dataset.pile != pile) {
+                        document.getElementById('message').textContent = '不能跨堆移除小球';
+                        selectedBalls.forEach(ball => ball.classList.remove('selected'));
+                        selectedBalls = [];
+                        return;
+                    }
+                }
 
-            selectedBalls.forEach(ball => ball.remove());
-            selectedBalls = [];
+                if (pile === '1') {
+                    pile1Count -= selectedBalls.length;
+                } else {
+                    pile2Count -= selectedBalls.length;
+                }
 
-            // 判断游戏是否结束
-            if (pile1Count === 0 && pile2Count === 0) {
-                document.getElementById('message').textContent = '你输了！';
-                document.getElementById('confirm-button').disabled = true;
-            } else {
-                // 切换到计算机回合
-                isPlayerTurn = false;
-                document.getElementById('current-player').textContent = '计算机';
-                document.getElementById('message').textContent = '计算机正在思考...';
-                setTimeout(computerTurn, 1000);
+                selectedBalls.forEach(ball => ball.remove());
+                selectedBalls = [];
+
+                // 强制重绘按钮样式
+                const confirmButton = document.getElementById('confirm-button');
+                confirmButton.disabled = true;
+                confirmButton.disabled = false;
+
+                // 判断游戏是否结束
+                if (pile1Count === 0 && pile2Count === 0) {
+                    document.getElementById('message').textContent = '你输了！';
+                    confirmButton.disabled = true;
+                    document.getElementById('lose-message').style.display = 'block'; // 显示“你输了”消息
+                } else {
+                    // 切换到计算机回合
+                    isPlayerTurn = false;
+                    document.getElementById('current-player').textContent = '计算机';
+                    document.getElementById('message').textContent = '计算机正在思考...';
+                    setTimeout(computerTurn, 1000);
+                }
             }
         }
 
@@ -142,7 +206,16 @@
             let pileToRemoveFrom;
 
             // 处理有一堆为 1 个球的特殊情况
-            if (pile1Count === 1 || pile2Count === 1) {
+            if (pile1Count === 1 && pile2Count === 0) {
+                console.log('特殊情况:1:0');
+                pileToRemoveFrom = 1;
+                removeCount = pile1Count; // 移除另一堆所有小球
+            } else if (pile1Count === 0 && pile2Count === 1) {
+                console.log('特殊情况:0:1');
+                pileToRemoveFrom = 2;
+                removeCount = pile2Count; // 移除另一堆所有小球
+            } else if (pile1Count === 1 || pile2Count === 1) {
+                console.log('特殊情况:1:1');
                 if (pile1Count === 1) {
                     pileToRemoveFrom = 2;
                     removeCount = pile2Count; // 移除另一堆所有小球
@@ -150,14 +223,16 @@
                     pileToRemoveFrom = 1;
                     removeCount = pile1Count; // 移除另一堆所有小球
                 }
-            }
-            if (pile1Count === 0 || pile2Count === 0) {
+            } else if (pile1Count === 0 || pile2Count === 0) {
+                console.log('特殊情况:0:n or n:0');
                 if (pile1Count === 0) {
                     pileToRemoveFrom = 2;
-                    removeCount = pile2Count - 1; // 移除另一堆所有小球，剩余1个
+                    removeCount = pile2Count > 1 ? pile2Count - 1 : pile2Count; // 移除另一堆所有小球，剩余1个，除非只剩1个
+                    console.log('pile1Count === 0, removeCount:', removeCount);
                 } else {
                     pileToRemoveFrom = 1;
-                    removeCount = pile1Count - 1; // 移除另一堆所有小球，剩余1个
+                    removeCount = pile1Count > 1 ? pile1Count - 1 : pile1Count; // 移除另一堆所有小球，剩余1个，除非只剩1个
+                    console.log('pile2Count === 0, removeCount:', removeCount);
                 }
             } else {
                 // 正常情况，使两堆数量相等
@@ -193,6 +268,7 @@
             if (pile1Count === 0 && pile2Count === 0) {
                 document.getElementById('message').textContent = '你赢了！';
                 document.getElementById('confirm-button').disabled = true;
+                document.getElementById('win-message').style.display = 'block'; // 显示“你赢了”消息
             } else {
                 // 切换到玩家回合
                 isPlayerTurn = true;
@@ -221,7 +297,35 @@
 
         // 初始化页面
         createPiles();
+
+        document.body.addEventListener('touchstart', function() {
+            const winMessage = document.getElementById('win-message');
+            const loseMessage = document.getElementById('lose-message');
+            if (winMessage.style.display === 'block' || loseMessage.style.display === 'block') {
+                resetGame();
+            }
+        });
+
+        function resetGame() {
+            // 重置游戏状态
+            pile1Count = Math.floor(Math.random() * 10) + 2;
+            pile2Count = Math.floor(Math.random() * 10) + 2;
+            isPlayerTurn = true;
+            selectedBalls = [];
+            document.getElementById('confirm-button').disabled = false;
+            document.getElementById('pile1').innerHTML = '';
+            document.getElementById('pile2').innerHTML = '';
+            document.getElementById('message').textContent = '';
+            document.getElementById('strategy').textContent = '';
+            document.getElementById('win-message').style.display = 'none';
+            document.getElementById('lose-message').style.display = 'none';
+            document.getElementById('current-player').textContent = '玩家';
+            createPiles();
+        }
     </script>
 </body>
 
 </html>
+
+
+
