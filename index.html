@@ -150,6 +150,15 @@
                     pileToRemoveFrom = 1;
                     removeCount = pile1Count; // 移除另一堆所有小球
                 }
+            }
+            if (pile1Count === 0 || pile2Count === 0) {
+                if (pile1Count === 0) {
+                    pileToRemoveFrom = 2;
+                    removeCount = pile2Count - 1; // 移除另一堆所有小球，剩余1个
+                } else {
+                    pileToRemoveFrom = 1;
+                    removeCount = pile1Count - 1; // 移除另一堆所有小球，剩余1个
+                }
             } else {
                 // 正常情况，使两堆数量相等
                 if (pile1Count === pile2Count) {
