@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>周庄捏瓜子游戏 - 双人版</title>
+    <title>周庄捏瓜子 - 双人版</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,11 +84,28 @@
             display: none;
             z-index: 1000;
         }
+
+        #tsparticles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
     </style>
 </head>
 
 <body>
-    <h1>周庄捏瓜子游戏 - 双人版</h1>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-fireworks@3.2.0/tsparticles.preset.fireworks.bundle.min.js"></script>
+    <script type="text/javascript">
+        (async (engine) => {
+            await loadFireworksPreset(engine);
+
+            await engine.load({ id: "tsparticles", options: { preset: "fireworks" } });
+        })(tsParticles);
+    </script>
+    <h1>周庄捏瓜子 - 双人版</h1>
     <p>当前玩家：<span id="current-player">玩家 A</span></p>
     <div id="pile1" class="pile"></div>
     <div class="separator"></div>
