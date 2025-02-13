@@ -72,7 +72,7 @@
 
         .win-message, .lose-message {
             font-family: '楷体', STKaiti, sans-serif;
-            font-size: 50px;
+            font-size: 30px;
             color: #61dafb;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 20px;
@@ -237,9 +237,11 @@
             } else {
                 // 正常情况，使两堆数量相等
                 if (pile1Count === pile2Count) {
-                    // 如果两堆数量相等，随机选择一堆移除 1 个
+                    // 如果两堆数量相等，随机选择一堆移除 n 个，尽量使留下至少2个
                     pileToRemoveFrom = Math.random() < 0.5 ? 1 : 2;
-                    removeCount = 1;
+                    random = Math.max(Math.floor(Math.random() * 10), 1);
+                    canReomoveCount = Math.max(pile1Count - 2, 1);
+                    removeCount = Math.min(random, canReomoveCount);
                 } else {
                     const diff = Math.abs(pile1Count - pile2Count);
                     if (pile1Count > pile2Count) {
@@ -329,6 +331,8 @@
 </body>
 
 </html>
+
+
 
 
 
