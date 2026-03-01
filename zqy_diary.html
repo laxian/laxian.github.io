@@ -1,0 +1,2486 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的成长日记</title>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        
+        .cover-page {
+            page: cover;
+        }
+        
+        @page cover {
+            size: A4;
+            margin: 0;
+            @top-left {
+                content: none;
+            }
+            @top-right {
+                content: none;
+            }
+            @bottom-center {
+                content: none;
+            }
+            counter-increment: page 0;
+        }
+
+        @page :first {
+            margin: 0;
+        }
+        
+        .container {
+            page: content;
+            counter-reset: page 0;
+        }
+
+        @page toc {
+            @top-left {
+                content: none;
+            }
+            @top-right {
+                content: none;
+            }
+            @bottom-center {
+                content: none;
+            }
+            counter-increment: page 0;
+        }
+        
+        @page content {
+            @top-left {
+                content: '《我的成长日记》';
+                font-size: 10pt;
+                color: #7a7a7a;
+            }
+            @top-right {
+                content: '周清逸';
+                font-size: 10pt;
+                color: #7a7a7a;
+            }
+            @bottom-center {
+                content: counter(page, decimal-leading-zero);
+                font-size: 10pt;
+                color: #7a7a7a;
+            }
+        }
+        
+        @media print {
+            /* 确保背景颜色和图像在打印/转PDF时保留 */
+            .cover-page {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .cover-container {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .back-cover-container {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .container {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            /* 防止特定元素出现不希望的边框或背景，但保留图形元素 */
+            .cover-subtitle,
+            .cover-author-info,
+            .cover-school-info,
+            .cover-grade-info,
+            .main-title,
+            .subtitle {
+                -webkit-print-color-adjust: unset !important;
+                color-adjust: unset !important;
+                print-color-adjust: unset !important;
+                box-shadow: none !important;
+            }
+            
+            /* 对于主标题，确保不会出现意外边框 */
+            .cover-title {
+                -webkit-print-color-adjust: unset !important;
+                color-adjust: unset !important;
+                print-color-adjust: unset !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            
+            /* 对于图形元素，只重置可能的边框/阴影，保留背景 */
+            .blue-planet,
+            .planet,
+            .planet-1,
+            .rocket,
+            .boy-figure {
+                -webkit-print-color-adjust: unset !important;
+                color-adjust: unset !important;
+                print-color-adjust: unset !important;
+                box-shadow: none !important;
+            }
+            
+            /* 修复打印时右侧文字被截断 */
+            .container {
+                width: auto !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+            }
+            
+            .foreword, .afterword {
+                padding: 15px !important;
+                margin: 10px 0 !important;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+            
+            .foreword p, .afterword p {
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+            
+            .entry-content {
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+            
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                display: block !important;
+            }
+
+            .cover-page {
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+            }
+
+            .cover-container,
+            .back-cover-container {
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+            }
+
+            .cover-page {
+                break-after: page;
+                page-break-after: always;
+            }
+        }
+        
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* 封面样式 */
+        .cover-page {
+            width: 210mm;
+            max-width: 100%;
+            height: 297mm; /* A4高度 */
+            /* background:  */
+                /* 星云效果 */
+                /* radial-gradient(circle at 20% 20%, rgba(155, 89, 182, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 80%, rgba(52, 152, 219, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 50% 10%, rgba(231, 76, 60, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 30% 90%, rgba(46, 204, 113, 0.1) 0%, transparent 20%),
+                linear-gradient(135deg, #232946 0%, #3e497a 100%); */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            color: white;
+            page-break-after: always;
+            page-break-inside: avoid;
+            break-inside: avoid-page;
+            overflow: hidden;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        
+        .cover-container {
+            width: 100%;
+            height: 100%;
+            background:
+                /* 星云效果 */
+                radial-gradient(circle at 20% 20%, rgba(155, 89, 182, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 80% 80%, rgba(52, 152, 219, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 50% 10%, rgba(231, 76, 60, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 30% 90%, rgba(46, 204, 113, 0.15) 0%, transparent 20%),
+                linear-gradient(160deg, #1a2a4a 0%, #2a3a5a 100%);
+            /* border: 12px solid #5a8fcf; */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.8;
+            z-index: 1;
+        }
+        /* 随机分布星星 */
+        .star1 { width: 3px; height: 3px; top: 40px; left: 80px; }
+        .star2 { width: 2px; height: 2px; top: 120px; left: 500px; }
+        .star3 { width: 4px; height: 4px; top: 300px; left: 200px; }
+        .star4 { width: 2px; height: 2px; top: 700px; left: 400px; }
+        .star5 { width: 3px; height: 3px; top: 600px; left: 100px; }
+        .star6 { width: 2px; height: 2px; top: 200px; left: 350px; }
+        .star7 { width: 3px; height: 3px; top: 500px; left: 550px; }
+        .star8 { width: 2px; height: 2px; top: 750px; left: 300px; }
+        .star9 { width: 3px; height: 3px; top: 100px; left: 250px; }
+        .star10 { width: 2px; height: 2px; top: 400px; left: 50px; }
+        /* 星球与奇幻元素 */
+        .planet {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f7d060 0%, #f4845f 100%);
+            box-shadow: 0 0 40px 10px #f7d06088;
+            top: 80px;
+            left: 60px;
+            z-index: 2;
+        }
+        .planet-ring {
+            position: absolute;
+            width: 160px;
+            height: 30px;
+            border-radius: 50%;
+            border: 5px solid #b8e0ff;
+            border-top: 5px solid #f4845f;
+            border-bottom: none;
+            top: 120px;
+            left: 40px;
+            transform: rotate(-15deg);
+            z-index: 2;
+        }
+        .blue-planet {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6ec1e4 0%, #2e86de 100%);
+            box-shadow: 0 0 20px 5px #6ec1e488;
+            top: 200px;
+            left: 480px;
+            z-index: 2;
+        }
+        .meteor {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fffbe6;
+            border-radius: 50%;
+            top: 100px;
+            left: 100px;
+            box-shadow: 
+                0 0 8px 2px #fffbe6,
+                0 0 15px 4px #f4845f;
+            z-index: 2;
+            animation: meteor-move 4s linear infinite;
+        }
+        @keyframes meteor-move {
+            0% { 
+                left: 100px; 
+                top: 100px; 
+                opacity: 1;
+            }
+            10% { 
+                opacity: 1;
+            }
+            90% { 
+                opacity: 0.8;
+            }
+            100% { 
+                left: 600px; 
+                top: 600px; 
+                opacity: 0;
+            }
+        }
+        .rocket {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            bottom: 200px;
+            left: 120px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(-30deg);
+            z-index: 3;
+        }
+        .rocket::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 15px solid #e74c3c;
+            top: -15px;
+            left: 20px;
+        }
+        .rocket::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            background: #e74c3c;
+            bottom: -10px;
+            left: 22px;
+            border-radius: 0 0 50% 50%;
+        }
+        .boy-figure {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            background: #232946;
+            top: 340px;
+            left: 150px;
+            border-radius: 50% 50% 20px 20px;
+            z-index: 4;
+        }
+        .boy-figure::before {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #ffe6fa;
+            border-radius: 50%;
+            top: -20px;
+            left: 7px;
+        }
+        .boy-figure::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 20px;
+            background: #232946;
+            top: 60px;
+            left: 12px;
+        }
+        .title-section {
+            text-align: center;
+            z-index: 10;
+            padding: 60px 40px 40px;
+            position: relative;
+            margin-top: -40px; /* 向上调整位置，为上方元素留出空间 */
+        }
+
+        .cover-title {
+            font-size: 72px;
+            color: #ffe6fa;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+            /* text-shadow: 2px 2px 8px #232946, 0 0 12px #f7d060; */
+            font-family: 'Georgia', 'STSong', serif;
+            position: relative;
+            /*background: rgba(35, 41, 70, 0.6); /* 半透明背景防止与背景元素重叠 */
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .cover-subtitle {
+            font-size: 32px;
+            color: #b8e0ff;
+            margin-bottom: 25px;
+            font-weight: normal;
+            /* font-style: italic; */
+            letter-spacing: 1px;
+            font-family: 'Georgia', 'STSong', serif;
+            /* text-shadow: 0 0 8px #232946; */
+            /*background: rgba(35, 41, 70, 0.5); /* 半透明背景防止与背景元素重叠 */
+            padding: 8px 15px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .cover-author-info {
+            font-size: 26px;
+            color: #f7d060;
+            margin: 12px 0;
+            font-family: 'Georgia', 'STSong', serif;
+            /*background: rgba(35, 41, 70, 0.4); /* 半透明背景防止与背景元素重叠 */
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .cover-school-info, .cover-grade-info {
+            font-size: 24px;
+            color: #ffe6fa;
+            margin: 8px 0;
+            font-family: 'Georgia', 'STSong', serif;
+            /*background: rgba(35, 41, 70, 0.4); /* 半透明背景防止与背景元素重叠 */
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .cover-decoration-line {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #b8e0ff, #f7d060, #b8e0ff, transparent);
+            margin: 25px auto;
+            position: relative;
+        }
+        .cover-decoration-line::before {
+            content: '✦';
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f4845f;
+            font-size: 20px;
+        }
+        .cover-bottom-text {
+            position: absolute;
+            bottom: 100px;
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+            color: #b8e0ff;
+            font-family: 'Georgia', 'STSong', serif;
+            letter-spacing: 1px;
+            /* text-shadow: 0 0 8px #232946; */
+            z-index: 6;
+        }
+        .cover-publisher-info {
+            position: absolute;
+            bottom: 65px;
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+            color: #ffe6fa;
+            font-family: 'Georgia', 'STSong', serif;
+            z-index: 6;
+        }
+
+        .container {
+            width: min(210mm, 100%);
+            max-width: 210mm; /* A4 width */
+            margin: 0 auto;
+            background-color: white;
+            padding: 24px;
+            min-height: 100vh; /* 使用视口高度替代固定A4高度 */
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-corner-art {
+            display: none !important;
+        }
+        
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .cover-page {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .cover-container {
+                min-height: 100vh;
+            }
+        }
+        
+        @media screen and (min-width: 1200px) {
+            .container {
+                padding: 30px;
+            }
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            font-size: 28px;
+            margin-bottom: 20px;
+            page-break-after: avoid;
+        }
+        
+        h1::before, h1::after {
+            content: '🏆 ';
+        }
+        
+        h2 {
+            color: #e65100;
+            font-size: 24px;
+            border-bottom: none;
+            margin-top: 30px;
+            page-break-after: avoid;
+            text-align: center;
+            position: relative;
+            padding: 10px 0;
+        }
+        
+        h2::before, h2::after {
+            content: '★';
+            color: #ffb300;
+            margin: 0 10px;
+        }
+        
+        h3 {
+            color: #1976d2;
+            font-size: 22px;
+            margin-top: 20px;
+            page-break-after: avoid;
+            padding-left: 15px;
+            border-left: 4px solid #42a5f5;
+            background: linear-gradient(to right, #e3f2fd, transparent);
+            padding: 8px 15px;
+            border-radius: 0 20px 20px 0;
+        }
+        
+        .book-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            page-break-after: avoid;
+            padding: 15px;
+            background: linear-gradient(135deg, #e3f2fd, #fff8e1);
+            border-radius: 15px;
+        }
+
+        .chapter-page {
+            page-break-before: always;
+            break-before: page;
+            page-break-after: always;
+            break-after: page;
+            min-height: 68vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(145deg, #f8fbff 0%, #fffaf0 100%);
+            border: 2px solid #d9ecff;
+            border-radius: 16px;
+            margin: 10px 0 20px;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+
+        .chapter-kicker {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #5a86ad;
+            margin-bottom: 14px;
+        }
+
+        .chapter-title {
+            font-size: 48px;
+            color: #1f4e79;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .chapter-subtitle {
+            margin-top: 16px;
+            font-size: 16px;
+            color: #8a6f46;
+        }
+        
+        .entry {
+            margin-bottom: 25px;
+            padding: 15px;
+            padding-bottom: 20px;
+            border-bottom: none;
+            page-break-inside: auto;
+            break-inside: auto;
+            page-break-before: always;
+            break-before: page;
+            background: linear-gradient(to bottom, #fff, #fefefe);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entry:first-of-type {
+            page-break-before: auto;
+            break-before: auto;
+        }
+
+        .chapter-page + .entry {
+            page-break-before: auto;
+            break-before: auto;
+        }
+
+        .entry-scene-art {
+            display: none !important;
+        }
+
+        .page-bottom-art {
+            display: none !important;
+        }
+
+        .entry-date,
+        .entry-content,
+        .entry-image {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .entry-date {
+            font-weight: bold;
+            color: #e65100;
+            font-size: 17px;
+            page-break-after: avoid;
+            break-after: avoid-page;
+            padding: 11px 13px 9px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 244, 226, 0.98) 72%, rgba(255, 233, 202, 1) 100%),
+                repeating-linear-gradient(0deg, rgba(246, 197, 130, 0.16) 0 1px, transparent 1px 5px);
+            border-radius: 15px;
+            display: inline-grid;
+            grid-template-columns: auto auto;
+            grid-template-areas:
+                'main badge'
+                'weather weather';
+            align-items: center;
+            gap: 4px 8px;
+            margin-bottom: 18px;
+            border: 2px solid rgba(227, 143, 73, 0.46);
+            box-shadow:
+                0 3px 0 rgba(201, 125, 61, 0.28),
+                0 8px 14px rgba(170, 106, 52, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.85);
+            position: relative;
+            transform: rotate(-0.6deg);
+        }
+        
+        .entry-date::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 14px;
+            border-radius: 13px 13px 0 0;
+            background: linear-gradient(90deg, #ff8b6a 0%, #ffb36e 45%, #ffd16f 100%);
+            opacity: 0.95;
+        }
+
+        .entry-date::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 4px;
+            height: 10px;
+            background:
+                radial-gradient(circle at 14px 5px, rgba(176, 96, 42, 0.5) 0 2px, rgba(255, 236, 207, 1) 2.2px 4px, transparent 4.2px),
+                radial-gradient(circle at calc(100% - 14px) 5px, rgba(176, 96, 42, 0.5) 0 2px, rgba(255, 236, 207, 1) 2.2px 4px, transparent 4.2px);
+            pointer-events: none;
+        }
+
+        .entry-date-main {
+            grid-area: main;
+            letter-spacing: 0.2px;
+            color: #a8561f;
+            font-size: 16px;
+            font-weight: 800;
+            margin-top: 6px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .entry-weather {
+            grid-area: weather;
+            font-size: 12px;
+            font-weight: 700;
+            color: #3f6179;
+            background: linear-gradient(180deg, #eaf8ff 0%, #d8efff 100%);
+            border: 1px solid rgba(110, 162, 199, 0.46);
+            border-radius: 8px;
+            padding: 2px 9px;
+            line-height: 1.3;
+            display: inline-block;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .entry-sport-badge {
+            grid-area: badge;
+            font-size: 12px;
+            color: #4f7899;
+            border: 1px solid rgba(115, 162, 194, 0.45);
+            border-radius: 999px;
+            padding: 1px 8px;
+            background: linear-gradient(180deg, #f2fbff 0%, #e4f6ff 100%);
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+            justify-self: end;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+        }
+        
+        .entry-content {
+            margin: 18px 0 10px;
+            font-size: 18px;
+            line-height: 1.8;
+            page-break-inside: auto;
+            page-break-before: avoid;
+            break-before: avoid-page;
+            text-indent: 2em;
+        }
+        
+        /* 段落首行缩进 */
+        .entry-content > p {
+            text-indent: 2em;
+            margin: 0 0 0.45em;
+            line-height: 1.6;
+        }
+
+        .entry-content > p.lead-paragraph {
+            text-indent: 0;
+            margin-top: 0.15em;
+        }
+
+        .entry-content > p.lead-paragraph::first-letter {
+            float: left;
+            font-size: 1.75em;
+            line-height: 1;
+            font-weight: bold;
+            margin: 0 0.16em 0 0;
+            color: #b86b2e;
+        }
+        
+        /* strong标签作为标题，不缩进 */
+        .entry-content strong {
+            text-indent: 0;
+            font-weight: bold;
+            display: block;
+            margin: 0.5em 0;
+        }
+        
+        /* 首行缩进 */
+        .entry-content::first-line {
+            text-indent: 2em; /* 首行缩进两个字符 */
+        }
+        
+        .entry-image {
+            text-align: center;
+            margin: 15px 0;
+            page-break-inside: avoid;
+            position: relative;
+            display: block;
+            width: 100%;
+            padding-top: 18px;
+            background: transparent;
+        }
+
+        .entry-image::before,
+        .entry-image::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            width: 56px;
+            height: 18px;
+            background: rgba(244, 222, 177, 0.78);
+            border: 1px solid rgba(153, 122, 86, 0.2);
+            z-index: 2;
+            transform: rotate(-8deg);
+        }
+
+        .entry-image::before {
+            left: calc(50% - 190px);
+        }
+
+        .entry-image::after {
+            right: calc(50% - 190px);
+            transform: rotate(8deg);
+        }
+        
+        .entry-image img {
+            max-width: 92%;
+            height: auto;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            background: transparent;
+            page-break-inside: avoid;
+            box-shadow: none;
+            box-sizing: border-box;
+            transform: rotate(-0.9deg);
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.16));
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-caption {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #6b7280;
+            letter-spacing: 0.3px;
+        }
+
+        .entry:nth-of-type(even) .entry-image img {
+            transform: rotate(0.9deg);
+        }
+
+        .entry:nth-of-type(3n) .entry-image img {
+            transform: rotate(-0.5deg);
+        }
+
+        @media print {
+            .chapter-page + .entry {
+                page-break-before: auto !important;
+                break-before: auto !important;
+            }
+
+            .entry {
+                min-height: 228mm;
+                box-sizing: border-box;
+                padding-bottom: 36mm;
+                margin-bottom: 0;
+            }
+
+            .entry-date {
+                border-color: rgba(193, 144, 74, 0.3);
+            }
+
+            .entry-scene-art {
+                display: none !important;
+            }
+
+            .page-bottom-art {
+                display: none !important;
+            }
+
+            .chapter-page {
+                min-height: 225mm;
+                border-radius: 0;
+                margin: 0;
+                border: 1px solid #d9ecff;
+            }
+
+            .entry-image::before,
+            .entry-image::after {
+                background: rgba(244, 222, 177, 0.5);
+            }
+
+            .entry-image img,
+            .entry:nth-of-type(even) .entry-image img,
+            .entry:nth-of-type(3n) .entry-image img {
+                transform: none;
+                max-width: 100%;
+                filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.12));
+            }
+
+            .entry-content > p.lead-paragraph::first-letter {
+                color: #a8642f;
+            }
+        }
+        
+        .divider {
+            text-align: center;
+            font-size: 24px;
+            margin: 30px 0;
+            page-break-before: always;
+        }
+        
+        .divider::before {
+            content: '★ · 🏆 · ★ · ⚽ · ★ · 🏆 · ★';
+            color: #ffb300;
+            letter-spacing: 3px;
+        }
+        
+        .foreword, .afterword {
+            font-style: normal;
+            background: linear-gradient(180deg, #ffffff, #fffaf2 68%);
+            padding: 26px 28px;
+            border: 1px solid rgba(181, 151, 112, 0.28);
+            page-break-inside: avoid;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 4px 18px rgba(122, 91, 57, 0.08);
+        }
+
+        .foreword {
+            page-break-before: always;
+            break-before: page;
+        }
+
+        .afterword {
+            margin-top: 22px;
+            page-break-before: always;
+            break-before: page;
+        }
+
+        .foreword::before, .afterword::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            right: 28px;
+            top: 18px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(161, 129, 92, 0.46), transparent);
+        }
+
+        .foreword h2,
+        .afterword h2 {
+            margin-top: 2px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-size: 28px;
+            color: #8f5c2b;
+            letter-spacing: 2px;
+        }
+
+        .foreword p,
+        .afterword p {
+            margin: 0 0 0.8em;
+            line-height: 1.86;
+            text-indent: 2em;
+            color: #3f3a34;
+            font-size: 17px;
+        }
+
+        .author-note p {
+            text-indent: 0;
+            line-height: 1.9;
+        }
+
+        .author-note strong {
+            color: #8f5c2b;
+        }
+
+        .author-layout {
+            display: grid;
+            grid-template-columns: 210px 1fr;
+            gap: 20px;
+            align-items: start;
+            margin-top: 8px;
+        }
+
+        .author-photo-wrap {
+            margin: 0;
+            padding: 8px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, #fff6ea, #f4fbff);
+            border: 1px solid rgba(178, 146, 108, 0.28);
+            box-shadow: 0 6px 16px rgba(102, 74, 43, 0.12);
+            transform: rotate(-1.2deg);
+        }
+
+        .author-photo {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            filter: saturate(1.03) contrast(1.03);
+        }
+
+        .author-photo-caption {
+            margin-top: 8px;
+            text-align: center;
+            font-size: 12px;
+            color: #7f674d;
+            letter-spacing: 0.8px;
+        }
+
+        .author-text {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 251, 243, 0.92));
+            border: 1px solid rgba(176, 142, 102, 0.24);
+            border-radius: 12px;
+            padding: 14px 16px 10px;
+        }
+
+        .author-text p {
+            margin-bottom: 0.65em;
+        }
+
+        @media screen and (max-width: 900px) {
+            .author-layout {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .author-photo-wrap {
+                width: min(240px, 70%);
+                margin: 0 auto;
+                transform: rotate(-0.6deg);
+            }
+        }
+        
+        .toc {
+            background: linear-gradient(145deg, #eef7ff, #fff9ee);
+            padding: 24px 26px;
+            margin-bottom: 25px;
+            border-radius: 14px;
+            border: 1px solid rgba(135, 170, 205, 0.25);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            text-align: center;
+            background: none;
+            border: none;
+            padding: 8px 10px 14px;
+            color: #2c5f8b;
+            font-size: 22px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(122, 162, 193, 0.28);
+            margin-bottom: 14px;
+        }
+        
+        .toc h3::before {
+            content: '📋 ';
+        }
+        
+        .toc h3::after {
+            content: ' 📋';
+        }
+        
+        .toc ul {
+            padding-left: 0;
+            list-style: none;
+            margin: 0;
+            column-count: 1;
+            counter-reset: toc-item;
+        }
+        
+        .toc li {
+            margin-bottom: 7px;
+            padding: 3px 0 6px 30px;
+            position: relative;
+            break-inside: avoid;
+            counter-increment: toc-item;
+            display: grid;
+            grid-template-columns: minmax(0, auto) 1fr auto;
+            align-items: end;
+            gap: 8px;
+        }
+        
+        .toc li::before {
+            content: counter(toc-item, decimal-leading-zero);
+            position: absolute;
+            left: 0;
+            top: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #6d8ba6;
+        }
+        
+        .toc a {
+            color: #6b4b26;
+            text-decoration: none;
+            display: inline;
+            line-height: 1.45;
+            font-size: 14.5px;
+            min-width: 0;
+        }
+
+        .toc-leader {
+            width: 100%;
+            border-bottom: 1px dotted rgba(122, 162, 193, 0.55);
+            transform: translateY(-2px);
+            min-width: 10px;
+        }
+
+        .toc-page {
+            min-width: 24px;
+            text-align: right;
+            font-size: 13px;
+            color: #5e7690;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+        }
+        
+        .toc a:hover {
+            color: #2d6ea3;
+            text-decoration: underline;
+        }
+
+        @media print {
+            .toc {
+                page: toc;
+            }
+
+            .toc {
+                box-shadow: none;
+                border-radius: 10px;
+                -webkit-box-decoration-break: clone;
+                box-decoration-break: clone;
+                page-break-after: always !important;
+                break-after: page !important;
+                margin: 0;
+                padding: 16px 18px 12px;
+            }
+
+            .toc ul {
+                column-count: 1;
+            }
+
+            .toc a {
+                font-size: 13.5px;
+            }
+
+            #foreword {
+                page-break-before: always;
+                break-before: page;
+                counter-reset: page 1;
+            }
+
+            .foreword,
+            .afterword {
+                box-shadow: none;
+                border-color: rgba(176, 147, 110, 0.35);
+                background: #fffdf8;
+            }
+
+            .author-layout {
+                grid-template-columns: 52mm 1fr;
+                gap: 12px;
+            }
+
+            .author-photo-wrap {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .author-text {
+                padding: 10px 12px 8px;
+                background: #fffefb;
+            }
+
+            .back-cover-container .content-section p {
+                font-size: 16px;
+                line-height: 1.75;
+            }
+        }
+        
+        /* 仅确保小标题不与其后的内容分离，避免整段被强制挤到下一页 */
+        .entry-content > strong {
+            page-break-after: avoid;
+            break-after: avoid-page;
+        }
+        
+        /* 图片前添加一些空间，但避免在图片前分页 */
+        .entry-image {
+            page-break-inside: avoid;
+            page-break-before: auto;
+            break-before: auto;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        .back-cover-container {
+            width: 100%;
+            height: 100%;
+            background:
+                /* 星云效果 */
+                radial-gradient(circle at 20% 20%, rgba(155, 89, 182, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 80% 80%, rgba(52, 152, 219, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 50% 10%, rgba(231, 76, 60, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 30% 90%, rgba(46, 204, 113, 0.15) 0%, transparent 20%),
+                linear-gradient(160deg, #1a2a4a 0%, #2a3a5a 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 动态星空背景 - 封尾 */
+        .back-cover-container .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .back-cover-container .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+        
+        .back-cover-container .star:nth-child(1) { top: 10%; left: 20%; width: 2px; height: 2px; animation-delay: 0s; }
+        .back-cover-container .star:nth-child(2) { top: 15%; left: 80%; width: 3px; height: 3px; animation-delay: 1s; }
+        .back-cover-container .star:nth-child(3) { top: 25%; left: 50%; width: 1px; height: 1px; animation-delay: 2s; }
+        .back-cover-container .star:nth-child(4) { top: 35%; left: 15%; width: 2px; height: 2px; animation-delay: 0.5s; }
+        .back-cover-container .star:nth-child(5) { top: 45%; left: 70%; width: 1px; height: 1px; animation-delay: 1.5s; }
+        .back-cover-container .star:nth-child(6) { top: 55%; left: 30%; width: 3px; height: 3px; animation-delay: 2.5s; }
+        .back-cover-container .star:nth-child(7) { top: 65%; left: 90%; width: 2px; height: 2px; animation-delay: 1s; }
+        .back-cover-container .star:nth-child(8) { top: 75%; left: 40%; width: 1px; height: 1px; animation-delay: 0s; }
+        .back-cover-container .star:nth-child(9) { top: 85%; left: 20%; width: 2px; height: 2px; animation-delay: 2s; }
+        .back-cover-container .star:nth-child(10) { top: 90%; left: 60%; width: 3px; height: 3px; animation-delay: 1.5s; }
+        .back-cover-container .star:nth-child(11) { top: 5%; left: 5%; width: 1px; height: 1px; animation-delay: 0.5s; }
+        .back-cover-container .star:nth-child(12) { top: 12%; left: 95%; width: 2px; height: 2px; animation-delay: 3s; }
+        .back-cover-container .star:nth-child(13) { top: 30%; left: 5%; width: 1px; height: 1px; animation-delay: 1s; }
+        .back-cover-container .star:nth-child(14) { top: 70%; left: 95%; width: 2px; height: 2px; animation-delay: 2.5s; }
+        .back-cover-container .star:nth-child(15) { top: 95%; left: 50%; width: 1px; height: 1px; animation-delay: 0.8s; }
+        
+        /* 太空星球 - 封尾 */
+        .cover-page .back-cover-container .planet {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .back-cover-container .planet-1 {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #3498db, #2980b9);
+            top: 70px;
+            right: 100px;
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.6);
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .back-cover-container .planet-1::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            top: 15px;
+            left: 20px;
+        }
+        
+        .back-cover-container .planet-1::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            top: 40px;
+            left: 50px;
+        }
+        
+
+        
+        .back-cover-container .title-section {
+            text-align: center;
+            z-index: 5; /* 提高层级，确保在背景之上 */
+            padding: 60px 30px 25px;
+            position: relative;
+            width: 100%;
+            margin-top: 0px;
+            border-radius: 10px;
+        }
+        
+        .back-cover-container .main-title {
+            font-size: 42px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(52, 152, 219, 0.8);
+            font-family: 'Impact', 'Arial Black', 'STSong', serif;
+            position: relative;
+            display: block;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+
+        
+        /* 中间内容区 - 封尾 */
+        .back-cover-container .content-section {
+            position: relative;
+            z-index: 4;
+            margin-top: 20px;
+            padding: 0 30px;
+            text-align: center;
+        }
+        
+        .back-cover-container .content-section p {
+            color: #ecf0f1;
+            font-size: 17px;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        
+
+        
+
+        
+        /* 动画效果 - 已经全局定义，无需重复 */
+        
+        /* 角落装饰 - 封尾 */
+        .back-cover-container .corner-decoration {
+            position: absolute;
+            font-size: 35px;
+            opacity: 0.4;
+            z-index: 1;
+            color: #f1c40f;
+        }
+        
+        .back-cover-container .corner-tl {
+            top: 20px;
+            left: 20px;
+            transform: rotate(-20deg);
+        }
+        
+        .back-cover-container .corner-tr {
+            top: 20px;
+            right: 20px;
+            transform: rotate(20deg);
+        }
+        
+        .back-cover-container .corner-bl {
+            bottom: 20px;
+            left: 20px;
+            transform: rotate(-20deg);
+        }
+        
+        .back-cover-container .corner-br {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(20deg);
+        }
+        
+        /* 确保封尾元素样式正确应用 */
+        .cover-page .back-cover-container .title-section {
+            text-align: center;
+            z-index: 5; /* 提高层级，确保在背景之上 */
+            padding: 60px 30px 25px;
+            position: relative;
+            width: 100%;
+            margin-top: 0px;
+            border-radius: 10px;
+        }
+        
+        .cover-page .back-cover-container .main-title {
+            font-size: 42px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(52, 152, 219, 0.8);
+            font-family: 'Impact', 'Arial Black', 'STSong', serif;
+            position: relative;
+            display: block;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .cover-page .back-cover-container .content-section {
+            position: relative;
+            z-index: 4;
+            margin-top: 20px;
+            padding: 0 30px;
+            text-align: center;
+        }
+        
+        .cover-page .back-cover-container .content-section p {
+            color: #ecf0f1;
+            font-size: 17px;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+    </style>
+    
+</head>
+<body>
+    <!-- 太空主题封面（奇幻风） -->
+    <div class="cover-page">
+        <div class="cover-container">
+            <!-- 星空背景元素 -->
+            <div class="star star1"></div>
+            <div class="star star2"></div>
+            <div class="star star3"></div>
+            <div class="star star4"></div>
+            <div class="star star5"></div>
+            <div class="star star6"></div>
+            <div class="star star7"></div>
+            <div class="star star8"></div>
+            <div class="star star9"></div>
+            <div class="star star10"></div>
+            <!-- 奇幻星球与装饰 -->
+            <div class="planet"></div>
+            <div class="planet-ring"></div>
+            <div class="blue-planet"></div>
+            <div class="meteor"></div>
+            <div class="rocket"></div>
+            <div class="boy-figure"></div>
+            <div class="title-section">
+                <div class="cover-title">我的成长日记</div>
+                <div class="cover-subtitle">一二年级的美好时光</div>
+                <div class="cover-decoration-line"></div>
+                <div class="cover-school-info">郑州艾瑞德学校</div>
+                <div class="cover-grade-info">二(五)班</div>
+                <div class="cover-author-info">周清逸</div>
+            </div>
+            <div class="cover-bottom-text">在星空下记录成长 · 童年如梦如幻</div>
+            <div class="cover-publisher-info">2026年2月</div>
+        </div>
+    </div>
+
+    <!-- 内容部分 -->
+    <div class="container">
+        <div class="toc">
+            <h3>目录</h3>
+            <ul>
+                <li><a href="#foreword">前言</a></li>
+                <li><a href="#feb19">2月19日 - 阴：心情的变化</a></li>
+                <li><a href="#feb23">2月23日 - 阴：篮球投球成功</a></li>
+                <li><a href="#feb26">2月26日 - 晴：开心的一天</a></li>
+                <li><a href="#mar2">3月2日 - 阴：双休日的感受</a></li>
+                <li><a href="#mar5">3月5日 - 晴：李老师的生日</a></li>
+                <li><a href="#mar9">3月9日 - 阴：回家的路上</a></li>
+                <li><a href="#mar14">3月14日 - 晴：参观科技馆</a></li>
+                <li><a href="#mar16">3月16日 - 晴：我的梦想</a></li>
+                <li><a href="#mar19">3月19日 - 晴：快到周五了</a></li>
+                <li><a href="#mar23">3月23日 - 晴：双休的最后一天</a></li>
+                <li><a href="#mar26">3月26日 - 晴：春天的花儿</a></li>
+                <li><a href="#mar30">3月30日 - 晴：阳光的故事</a></li>
+                <li><a href="#apr5">4月5日 - 晴：和爸爸打篮球</a></li>
+                <li><a href="#apr13">4月13日 - 晴：运动会金牌</a></li>
+                <li><a href="#apr19">4月19日 - 晴：锦和公园游记</a></li>
+                <li><a href="#apr23">4月23日 - 晴：世界读书日</a></li>
+                <li><a href="#may3">5月3日 - 晴：五一假期回老家</a></li>
+                <li><a href="#may8">5月8日 - 阴：植物园之旅</a></li>
+                <li><a href="#may14">5月14日 - 晴：开心的一天</a></li>
+                <li><a href="#may18">5月18日 - 晴：自己买雪糕</a></li>
+                <li><a href="#may21">5月21日 - 晴：最喜欢的语文课</a></li>
+                <li><a href="#may25">5月25日 - 阴：吃火锅</a></li>
+                <li><a href="#may28">5月28日 - 晴：小猫的故事</a></li>
+                <li><a href="#jun8">6月8日 - 晴：露营经历</a></li>
+                <li><a href="#jun15">6月15日 - 晴：买东西的经历</a></li>
+                <li><a href="#jul2">7月2日 - 晴：冬天玩雪的故事</a></li>
+                <li><a href="#jul6">7月6日 - 晴：洗碗的经历</a></li>
+                <li><a href="#jul12">7月12日 - 晴：和妈妈通电话</a></li>
+                <li><a href="#jul13">7月13日 - 晴：升旗仪式</a></li>
+                <li><a href="#jul16">7月16日 - 晴：让座的故事</a></li>
+                <li><a href="#jul21">7月21日 - 多云：爬长城</a></li>
+                <li><a href="#jul24">7月24日 - 晴：小间帮助爸爸</a></li>
+                <li><a href="#jul27">7月27日 - 晴：北戴河之旅</a></li>
+                <li><a href="#jul30">7月30日 - 晴：拔河比赛</a></li>
+                <li><a href="#aug3">8月3日 - 晴：吃饺子</a></li>
+                <li><a href="#aug9">8月9日 - 阴：吃大餐</a></li>
+                <li><a href="#aug11">8月11日 - 晴：看电影《罗小黑战纪》</a></li>
+                <li><a href="#aug17">8月17日 - 晴：小长耳兔的故事</a></li>
+                <li><a href="#aug20">8月20日 - 晴：小虎和长颈鹿</a></li>
+                <li><a href="#sep1">9月1日 - 晴：班级打扫卫生</a></li>
+                <li><a href="#sep3">9月3日 - 阴：九三阅兵仪式</a></li>
+                <li><a href="#sep6">9月6日 - 阴：纪念和平</a></li>
+                <li><a href="#sep14">9月14日 - 晴：参观科技馆</a></li>
+                <li><a href="#oct8-1">10月8日 - 阴：国庆中秋假期</a></li>
+                <li><a href="#oct8-2">10月8日 - 阴：祖国的生日</a></li>
+                <li><a href="#oct9">10月9日 - 晴：秋天摘苹果</a></li>
+                <li><a href="#oct18">10月18日 - 阴：周末时光</a></li>
+                <li><a href="#oct25">10月25日 - 小雨：参观河南省科技馆</a></li>
+                <li><a href="#nov2">11月2日 - 多云：我最喜欢的玩具</a></li>
+                <li><a href="#nov15">11月15日 - 晴：神奇的迪空间</a></li>
+                <li><a href="#nov23">11月23日 - 多云：春天的故事</a></li>
+                <li><a href="#nov30">11月30日 - 晴：奇特的周末</a></li>
+                <li><a href="#dec1">12月1日 - 多云：篮球课</a></li>
+                <li><a href="#dec6">12月6日 - 多云：乌龟搬花盆</a></li>
+                <li><a href="#dec13">12月13日 - 晴：2025年的第一场雪</a></li>
+                <li><a href="#dec20">12月20日 - 晴：胆小的老鼠</a></li>
+                <li><a href="#dec28">12月28日 - 晴：看书的诱惑</a></li>
+                <li><a href="#jan10">1月10日 - 晴：我最喜欢的玩具</a></li>
+                <li><a href="#afterword">后记</a></li>
+                <li><a href="#author">关于作者</a></li>
+            </ul>
+        </div>
+
+        <div class="foreword front-matter" id="foreword">
+            <h3>前言</h3>
+            <p>这是我的2025年日记合集，记录了我从一年级下学期到二年级上学期的成长经历。从刚刚适应学校生活的一年级下学期，到充满好奇与想象的二年级上学期，每一篇日记都是我内心世界的真实写照。</p>
+            <p>在一年级下学期的记录中，我开始学会观察生活，记录简单的心情变化和日常活动。进入二年级后，我开始写更多的故事，想象力也越来越丰富，开始创作童话般的小故事。</p>
+            <p>这些日记不仅记录了我的学习生活，还记录了我的想象力发展过程。从最初简单的描述，到后来能够编写完整的故事，我感受到了自己的进步。我写过关于小动物的童话故事，记录了参观各种场所的经历，表达了对家人朋友的关爱，还抒发了对祖国的热爱。</p>
+            <p>感谢老师和家长对我的鼓励，让我能够坚持写日记，记录下这些珍贵的童年时光。希望每一位读者都能从这本日记中感受到童真的美好，找回自己童年时的那份纯真与快乐。</p>
+        </div>
+
+        <div class="entry" id="feb19">
+            <div class="entry-date">2月19日 - 阴</div>
+            <div class="entry-content">今天我的心情很不一样，一会儿开心一会儿难过。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/1.jpg" alt="2月19日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="feb23">
+            <div class="entry-date">2月23日 - 阴</div>
+            <div class="entry-content">我今天很开心。因为可以把篮球投到篮球框里，框也高，投了四次。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/2.jpg" alt="2月23日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="feb26">
+            <div class="entry-date">2月26日 - 晴</div>
+            <div class="entry-content">我今天感觉有一点开心。我还感觉我不是有一点开心，而是很开心。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/3.jpg" alt="2月26日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar2">
+            <div class="entry-date">3月2日 - 阴</div>
+            <div class="entry-content">我在这双休之中感觉总是没事干，我又感觉不是没事干，而是有一点儿事干，也是有很多事情干。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/4.jpg" alt="3月2日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar5">
+            <div class="entry-date">3月5日 - 晴</div>
+            <div class="entry-content">今天我有一个事，也可以说成是一个秘密。我想大家都知道，有谁不知道呢？
+            答案：数学李老师生日。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/5.jpg" alt="3月5日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar9">
+            <div class="entry-date">3月9日 - 阴</div>
+            <div class="entry-content">今天我和妈妈回家，中途我们不是去这，就是去那儿，去了很多地方。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/6.jpg" alt="3月9日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar14">
+            <div class="entry-date">3月14日 - 晴</div>
+            <div class="entry-content">我们今天去了郑州科技馆研学，很好玩，我很快乐。我又让妈妈带着去科技馆，是周六去的。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/8.jpg" alt="3月14日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar16">
+            <div class="entry-date">3月16日 - 晴</div>
+            <div class="entry-content">我有亿个梦想，也是说不完的梦想，我最喜欢的是当老师，因为当老师可以讲课。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/7.jpg" alt="3月16日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar19">
+            <div class="entry-date">3月19日 - 晴</div>
+            <div class="entry-content">我今天很快乐，因为快周五了，你们一定不知道会发生什么，但我也不能告诉你们，这是一个秘密，大家可以猜一猜。大家都猜对了吗？</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/9.jpg" alt="3月19日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar23">
+            <div class="entry-date">3月23日 - 晴</div>
+            <div class="entry-content">今天是双休的最后一天，我觉得今天是个不错的日子，也是一个欢乐的日子，因为今天去吃大餐了！非常美味！我还喝了一杯雪碧。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/10.jpg" alt="3月23日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar26">
+            <div class="entry-date">3月26日 - 晴</div>
+            <div class="entry-content">春天到了，美丽的花儿出来了。这些花可不少，数也数不清，实在太多了。校园全是花。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/11.jpg" alt="3月26日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="mar30">
+            <div class="entry-date">3月30日 - 晴</div>
+            <div class="entry-content"><p>今天的天气非常非常好。</p><p>阳光洒在地上、我们身上，到处都是阳光。</p><p>这些阳光很像魔法。</p><p>我和妈妈在外面要回家的时候，就觉得有阳光。</p><p>下午的时候，太阳公公下山了。</p><p>天慢慢地黑了，也慢慢地冷了，晚上一定更冷吧？</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip1/12.jpg" alt="3月30日配图">
+            </div>
+            <br>
+            <div class="entry-image">
+                <img src="extracted_zip1/13.jpg" alt="3月30日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="apr5">
+            <div class="entry-date">4月5日 - 晴</div>
+            <div class="entry-content">
+                <p>今天我和爸爸一起去打篮球，我们玩得很开心。</p>
+                <p>爸爸的技术非常高超，就像一座大山。</p>
+                <p>但我连篮框都投不进，爸爸也会投不进。他还说球有一点大，球就像大西瓜的大小。</p>
+                <p>以后我一定要让技术变高超。</p>
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip1/14.jpg" alt="4月5日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip1/15.jpg" alt="4月5日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="apr13">
+            <div class="entry-date">4月13日 - 晴</div>
+            <div class="entry-content"><p>艾运会时大部分人都参加了一个项目，那就是迎面接力，他们都得到了金牌，也包括我。</p><p>我们班都有金牌。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip1/16.jpg" alt="4月13日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="apr19">
+            <div class="entry-date">4月19日 - 晴</div>
+            <div class="entry-content">今天我和妈妈去了锦和公园，那里很好玩。那里有一个湖，湖很不清澈，一眼望不到头。有很多好玩儿的。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/17.jpg" alt="4月19日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="apr23">
+            <div class="entry-date">4月23日 - 晴</div>
+            <div class="entry-content">今天是世界读书日，同时也是我们的阅读节。阅读节有"以书换书"的活动，我的书名是《海底两万里》。书很厚，有两厘米。</div>
+            <div class="entry-image">
+                <img src="extracted_zip1/18.jpg" alt="4月23日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="may3">
+            <div class="entry-date">5月3日 - 晴</div>
+            <div class="entry-content"><p>五一，我们回老家了，凌晨三点多我们出发了，用了两个多小时。</p><p>我们带了很多东西，一路非常顺利。</p><p>到了老家我很快就写完作业了，又玩了一会儿，又和爸爸打了球。我很高兴。</p><p>我喜欢五一假期，因为五一假期不长但刚刚好。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip1/19.jpg" alt="5月3日配图1">
+            </div>
+            <br>
+            <div class="entry-image">
+                <img src="extracted_zip1/20.jpg" alt="5月3日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="may8">
+            <div class="entry-date">5月8日 - 阴</div>
+            <div class="entry-content"><p>今天我们去植物园了。我看到了紫色的花、白色的花、红色的花、黄色的花、粉色的花。</p><p>我最喜欢的是红色的花，因为我喜欢红色。</p><p>我还看到了一些树，名字很奇怪。下次我还要去。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip1/21.jpg" alt="5月8日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="may14">
+            <div class="entry-date">5月14日 - 晴</div>
+            <div class="entry-content"><p>今天我在学校很开心。在家我更开心，因为我可以和妈妈打台球。我还能打赢妈妈呢！</p><p>我每次回家都会打台球。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/2.jpg" alt="5月14日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="may18">
+            <div class="entry-date">5月18日 - 晴</div>
+            <div class="entry-content"><p>今天我和妈妈回家的时候，我想去买雪糕，但是妈妈说："得自己去买了。"我想了想，一直想让妈妈和我去，但是我去了之后，还蛮顺利那。</p><p>妈妈还夸我棒呢！</p><p>你们有这样的经历吗？说出来听听。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/3.jpg" alt="5月18日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="may21">
+            <div class="entry-date">5月21日 - 晴</div>
+            <div class="entry-content"><p>语文课是我最喜欢的课。因为语文课能学习生字。今天学习了《小猴子下山》。语文晚自习也一样。</p><p>《小猴子下山》才学了一半多呢！</p><p>后面的课文还有《棉花姑娘》和《咕咚》……</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/4.jpg" alt="5月21日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="may25">
+            <div class="entry-date">5月25日 - 阴</div>
+            <div class="entry-content"><p>今天我和妈妈吃火锅啦。吃的有菠菜、面条和羊肉卷……</p><p>我不小心摸到了锅边，感觉一点也不烫手。</p><p>我很高兴，火锅也很美味。</p><p>下次我还要吃。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/5.jpg" alt="5月25日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="may28">
+            <div class="entry-date">5月28日 - 晴</div>
+            <div class="entry-content"><p>有一天，一只小猫在爷爷家看到爷爷在种玉米。小猫看见了，叫了起来。小猫又看见了奶奶在种花生。它又叫了起来。</p><p>它想：如果我把鱼种下去，会不会长出鱼呢？</p><p>它学爷爷奶奶把鱼种下去，它躺在地上，在梦中得到了好多好多条鱼。</p><p>它很开心。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/6.jpg" alt="5月28日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip2/7.jpg" alt="5月28日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="jun8">
+            <div class="entry-date">6月8日</div>
+            <div class="entry-content"><p>露营时，我看了露天电影，吃了一些零食。</p><p>晚上我看到月亮在动，其实是云在动。</p><p>睡觉时，我在最右边，我睡着了两次。</p><p>早上起来很长时间都是用来玩耍，玩到七点半左右，就要回学校了。</p><p>我很开心。</p><p>但是小学的这六年就不能再去了哦。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/8.jpg" alt="6月8日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip2/9.jpg" alt="6月8日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="jun15">
+            <div class="entry-date">6月15日</div>
+            <div class="entry-content"><p>今天我去买东西了。</p><p>买了许多东西，比如说：酸奶、西瓜、面包片。</p><p>总重量大概在三到六公斤。</p><p>我买的很少，而妈妈买很多。</p><p>每一周都会去买东西。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/10.jpg" alt="6月15日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul2">
+            <div class="entry-date">7月2日 - 晴</div>
+            <div class="entry-content"><p>小明和小红在外面玩雪。</p><p>因为这是冬天，所以他们穿着棉袄。</p><p>突然一个男雪人说：“这里可真美呀！”</p><p>女雪人说：“当然啦！”小明和小红说：“我们很开心，你们呢？”两个雪人说：“我们也很开心。”</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/11.jpg" alt="7月2日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul6">
+            <div class="entry-date">7月6日 - 晴</div>
+            <div class="entry-content"><p>今天我洗碗啦！</p><p>妈妈说每天中午、下午都是我洗碗。只有上午是妈妈洗碗。我洗得非常干净，我还会把洗好的碗放到碗柜里，而且我还能放得很整齐。</p><p>这也让我很开心。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/12.jpg" alt="7月6日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul12">
+            <div class="entry-date">7月12日 - 晴</div>
+            <div class="entry-content"><p>今天我在姥姥家和妈妈打电话的时候，妈妈说她已到姥姥家门口啦！</p><p>但是妈妈明天就走了。妈妈要回郑州去上班啦。下周一左右妈妈就来接我啦！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/13.jpg" alt="7月12日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul13">
+            <div class="entry-date">7月13日 - 晴</div>
+            <div class="entry-content"><p>一大早，同学来到操场举行升旗仪式。他表情非常非常严肃。</p><p>他们站得和军人相似。他唱着国歌。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/14.jpg" alt="7月13日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul16">
+            <div class="entry-date">7月16日 - 晴</div>
+            <div class="entry-content"><p>早上两个小朋友上公交车的时候，其中的一个小朋友看到老奶奶没有位置，立马把座位让给了老奶奶。老奶奶说："谢谢你"。小朋友说："不客气"。</p><p>另一个小朋友说："你可真会助人为乐"。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/15.jpg" alt="7月16日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul21">
+            <div class="entry-date">7月21日 - 多云</div>
+            <div class="entry-content"><p>我去爬长城啦！我爬的是八达岭长城。我还爬完了呢！</p><p>回去的时候是坐缆车回去的。</p><p>在缆车上不到一分钟就到了。</p><p>车上的墙是玻璃做的，但是我在里面一点儿也不怕，只有一点点怕，因为车是空中的。</p><p>门票是贰佰。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/16.jpg" alt="7月21日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip2/17.jpg" alt="7月21日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="jul24">
+            <div class="entry-date">7月24日</div>
+            <div class="entry-content">
+                傍晚，小间的爸爸在看报纸，他想喝一杯水，这句话被小间听到了，他立马拿了一杯水给了爸爸，他说"谢谢小间"。小间说："不客气。"
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip2/18.jpg" alt="7月24日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul27">
+            <div class="entry-date">7月27日 - 晴</div>
+            <div class="entry-content"><p>我去北戴河啦！我在海里找到了许多许多小贝壳，一个大贝壳，大贝壳和耳朵一样大。我还找到了海草。</p><p>那里中午很热哦！</p><p>我在北戴河玩儿了两天，为什么只玩儿两天呢？因为我爸爸要上班。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/19.jpg" alt="7月26-27日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="jul30">
+            <div class="entry-date">7月30日 - 晴</div>
+            <div class="entry-content"><p>早上在公园有"一百开心小学"。他们和他们的家长比拔河。</p><p>三个小孩和两位大人比。</p><p>三个小孩赢了两次，家长赢了一次，老师说："小朋友们胜！小朋友们胜！"</p><p>另外两名小朋友笑了。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/20.jpg" alt="7月30日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="aug3">
+            <div class="entry-date">8月3日 - 晴</div>
+            <div class="entry-content">
+                今天吃饺子了，我吃了十个饺子，饺子大大的白白的。妈妈吃了二十个饺子。对了！我还没喝饺子汤呢。饺子汤很好喝的。
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip2/21.jpg" alt="8月3日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="aug9">
+            <div class="entry-date">8月9日 - 阴</div>
+            <div class="entry-content"><p>今天我们吃大餐了。</p><p>有一次去吃大餐，我带三百元用了三百多，看来三个人三百不行。这次两个人带三百就可以啦。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip2/22.jpg" alt="8月9日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="aug11">
+            <div class="entry-date">8月11日 - 晴</div>
+            <div class="entry-content"><p>我去看电影了。看了两小时。看得是罗小黑。三点半就开始了。</p><p>罗小黑是一只小猫跑得非常快。它还会变成人、巨大猫呢！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/2.jpg" alt="8月11日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="aug17">
+            <div class="entry-date">8月17日 - 晴</div>
+            <div class="entry-content"><p>一大早，小长耳兔在家干活，长耳兔是耳朵很长的小兔子，喜欢自己种东西吃。</p><p>她早上七点起来翻地。晚上播种，一个月后种子变成小白菜，小长耳兔再浇了浇水，小白菜便成长大白菜啦！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/4.jpg" alt="8月17日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="aug20">
+            <div class="entry-date">8月20日 - 晴</div>
+            <div class="entry-content"><p>一只名叫小虎的猫，他不喜欢长颈鹿。</p><p>有一天，他在玩的时候，把风筝弄到树上了。长颈鹿帮小虎弄了下来，两人变成好朋友啦！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/5.jpg" alt="8月20日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="sep1">
+            <div class="entry-date">9月1日 - 晴</div>
+            <div class="entry-content"><p>"好花朵学校"的二二班在打扫卫生。有的扫地、拖地、还有浇花……</p><p>他们打扫得很干净。老师看见很高兴。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/3.jpg" alt="9月1日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="sep3">
+            <div class="entry-date">9月3日 - 小阴</div>
+            <div class="entry-content">
+                今天九点整，全校师生一起观看了九三阅兵仪式。我看见了习爷爷阅兵。他们让我不可思议了！
+                我还看见战机摆成了"80"的字样。最后亿万个气球飘到天空中，我看花眼了。
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/6.jpg" alt="9月3日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="sep6">
+            <div class="entry-date">9月6日 - 阴</div>
+            <div class="entry-content"><p>九月三日，全校师生一起看九三阅兵。我觉得这个美好中国来之不易。</p><p>我看见阅兵队伍走得非常非常直。</p><p>我还看见成千上万个鸽子和气球飞向天空，我看花眼了！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/7.jpg" alt="9月6日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="sep14">
+            <div class="entry-date">9月14日 - 晴</div>
+            <div class="entry-content"><p>我去科技馆了。这次没什么发现。我最喜欢三、四层，因为我觉得三、四层更好玩些。有的有电梯模型，有的有π的生日，还有的有空气炮……</p><p>大概去那里了四个小时。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/8.jpg" alt="9月14日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="oct8-1">
+            <div class="entry-date">10月8日 - 阴</div>
+            <div class="entry-content">
+                国庆节放假与中秋节放假合并在一块儿，一共放假八天。好长的假期啊……
+                放假第一天，我在家待了一天。第二天到第六天我在老家打球、跳远、打比赛……第七天我早上从老家回来了、出去吃吃饭、回来和我的一个哥哥和妹妹玩儿。然后又吃了一顿晚饭。第八天就开始写作业了。
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/11.jpg" alt="10月8日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/12.jpg" alt="10月8日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="oct8-2">
+            <div class="entry-date">10月8日 - 阴</div>
+            <div class="entry-content">
+                <p>祖国是一个由成千上万个小家组成的大家。</p>
+                <p>十月一日是国家的生日--国庆节，纪念好多的战争的胜利，才有了国庆节。</p>
+                <p>我很喜欢国庆节，因为国庆节会放七天假，所以我喜欢国庆节。</p>
+                <p>今天的和平来之不易，所以我要好好珍惜它。让我们共同祝福祖国妈妈生日快乐！</p>
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/9.jpg" alt="10月8日配图3">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/10.jpg" alt="10月8日配图4">
+            </div>
+        </div>
+
+        <div class="entry" id="oct9">
+            <div class="entry-date">10月9日 - 晴</div>
+            <div class="entry-content"><p>秋天到了。两个农民在摘苹果。一个摘苹果，一个接苹果。树上的苹果又大又红，像小灯笼。木桶里的苹果越来越多，最后木桶里的苹果堆积如山。</p><p>他们非常开心，因为他得到了许许多多的苹果。</p><p>这些苹果有的在超市卖掉，有的做成苹果汁。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/19.jpg" alt="10月9日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/20.jpg" alt="10月9日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="oct18">
+            <div class="entry-date">10月18日 - 阴</div>
+            <div class="entry-content"><p>周六，我九点起床，比妈妈早起十分钟。我刷刷牙、洗洗脸、吃吃饭。</p><p>然后我们就送姥爷回家去了。因为他还要上班。</p><p>在家里，姥姥摘了许许多多的石榴；姥爷做了饺子；我自己做了石榴汁。</p><p>吃饺子的时候，我做了一个味道好的料汁。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/13.jpg" alt="10月18日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/14.jpg" alt="10月18日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="oct25">
+            <div class="entry-date">10月25日 - 小雨</div>
+            <div class="entry-content">
+                <p>周三，我去到好玩的"河南省科技馆"。那里非常非常大。听说它还是河南省最大的科技馆呢！</p>
+                <p>首先我去了"动物世界"，我看到了蜂王、工蜂等动物。</p>
+                <p>然后去了"探索发现"，里面有尖叫厅。我发现开着门的时候，多少人大叫声音都不会太大；关着门的话，声音就变小了；我还发现多少人在尖叫厅里尖叫也不会发出非常大的声音。</p>
+                <p>我在科技馆里发现了很多好玩儿的。</p><p>“河南省科技馆”真是个好地方！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/15.jpg" alt="10月25日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/16.jpg" alt="10月25日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="nov2">
+            <div class="entry-date">11月2日 - 多云</div>
+            <div class="entry-content"><p>我最喜欢的玩具是魔方，它是妈妈买的。</p><p>它是正方形的玩具，它的颜色有红色、橙色、黄色、白色、蓝色、绿色。</p><p>它是用角块、棱块、中心块组成的，而这些小方块的数量还不一样呢！角块有八个，边块有十二个，中心块有六个。</p><p>有时候我看到它就玩儿呢！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/17.jpg" alt="11月2日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/18.jpg" alt="11月2日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="nov15">
+            <div class="entry-date">11月15日 - 晴</div>
+            <div class="entry-content"><p><strong>神奇的迪空间</strong></p><p>周四，我去了迪空间。</p><p>那里非常大，总共有四层。我看到了做一个车的模型只需要三到五秒！我还看到了刷漆的东西。它是用灯来刷的，像画画一样，一到时间，灯就不亮了，像没了电似的。但只有四种颜色。</p><p>迪里空间真好玩儿！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip3/21.jpg" alt="11月15日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip3/22.jpg" alt="11月15日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="nov23">
+            <div class="entry-date">11月23日 - 多云</div>
+            <div class="entry-content">
+                <p>春天不知不觉地来了。那里百花争艳，姹紫嫣红的小花香气扑鼻，和香水的香味差不多。</p>
+                <p>树下有个坑，小鸭子不小心掉下去了。小猴子看见了，连忙拿出木棍，让小鸭子抓住木棍，但是小猴子怕自己也掉下去，只好用尾巴缠在树上，让小鸭子去抓棍子。大象和小熊看见小猴子在救小鸭子。一直叫加油、加油、加油……</p>
+                <p>小鸭子得救了，它对小猴子说："谢谢你！"</p>
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/2.jpg" alt="11月23日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/3.jpg" alt="11月23日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="nov30">
+            <div class="entry-date">11月30日 - 晴</div>
+            <div class="entry-content"><p><strong>奇特的周末</strong></p>
+                <p>周六，我和爸爸一起去月子中心接妈妈。到了那里还可以吃顿火锅。火锅吃到一半就走了，我的妹妹叫安安。她在要走的时候，哇哇大哭。但是她坐在车上的时候，她就不哭了，她不会是睡着了吧！</p>
+                <p>这个周末真好玩！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/4.jpg" alt="11月30日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="dec1">
+            <div class="entry-date">12月1日 - 多云</div>
+            <div class="entry-content"><p>周日，我去上了篮球课，总共有三小节课。我一共得九分，最高分好像是十分。上完篮球课就买了一根香肠呢。</p>
+                <p>这个周末真好玩！</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/5.jpg" alt="12月1日配图">
+            </div>
+        </div>
+
+        <div class="entry" id="dec6">
+            <div class="entry-date">12月6日 - 多云</div>
+            <div class="entry-content"><p><strong>乌龟搬花盆</strong></p><p>小乌龟想给爷爷寄一盆花，但是那盆花才发芽。  
+                乌龟想推着花盆走，可是它的力量太小推不动花盆。  
+                但是它发现把花盆放在自己的壳上，就觉得不重了。 <br> 
+                它走啊走，走到了一处山坡上，它发现花盆里的芽开花了，它看了看花盆里的花说："原来是苹果花呀！"这让它一路都是香的。  
+                它爬呀爬，一直爬到爷爷的院子里。爷爷看见了说"你带一棵苹果树干什么呀？"它发现花盆里的花变成大苹果树了！它和爷爷吃上了很甜的苹果。</p><p>爷爷表扬了它。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/6.jpg" alt="12月6日配图1">
+            </div>
+            <br>
+            <div class="entry-image">
+                <img src="extracted_zip4/7.jpg" alt="12月6日配图2">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/8.jpg" alt="12月6日配图3">
+            </div>
+        </div>
+
+        <div class="entry" id="dec13">
+            <div class="entry-date">12月13日 - 晴</div>
+            <div class="entry-content"><p><strong>下雪了</strong></p><p>周五，下了一场雪，这是2025年的第一场雪。  
+                下课的时候好多好多人都去玩儿雪、打雪仗，就连每天课间都抢着玩的桌球也很少人玩了，都去玩雪了。  
+                这场雪不太小，也不太大。但一片白茫茫的，就像万物披上了一层棉被。楼梯口那儿很滑，跟滑冰场似的。外面很冷，像是在冰库。回家路上的路障的雪很厚，至少得有五到十厘米。</p><p>这真是一场难忘的雪。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/9.jpg" alt="12月13日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/10.jpg" alt="12月13日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="dec20">
+            <div class="entry-date">12月20日 - 晴</div>
+            <div class="entry-content"><p><strong>胆小的老鼠</strong></p><p>有一天，一只老鼠在电脑旁玩耍，它不小心踩到电脑上的按键，电脑屏幕上突然出现了一只猫，这是一只什么样的猫呢？是一只有大大的眼睛、尖锐的牙齿、大大的嘴巴、圆圆的脑袋、有着一副凶猛的样子的猫。  
+                这可把老鼠吓得连连后退。老鼠心里想：完了，完了，大花猫要来吃我了，这可怎么办啊？老鼠发现这大花猫没有去吃它，赶快跑掉了。  
+                老鼠心想：我以后再也不会在电脑旁边玩了。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/11.jpg" alt="12月20日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/12.jpg" alt="12月20日配图2">
+            </div>
+        </div>
+
+        <div class="entry" id="dec28">
+            <div class="entry-date">12月28日 - 晴</div>
+            <div class="entry-content"><p>妈妈做好了饭菜，爸爸说："可以开饭了吗？"妈妈发现儿子不见了。对爸爸慈祥地说："现在儿子不见了，你去叫儿子过来吃饭。"  
+                爸爸找啊找，发现儿子在看书。他对儿子说：”该去吃饭了。"</p><p>爸爸发现这本书很好看，就看了一会儿。</p><p>儿子说："可以开饭了吗？"妈妈发现爸爸不见了，对儿子慈祥地说："现在爸爸不见了，去叫爸爸来吃饭。"
+                儿子找啊找，发现爸爸在看书。儿子发现这本很好看，就忘记妈妈说要去叫爸爸的事了。  
+                儿子和爸爸一起看书。她们看了好久书，一直没有吃上饭。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/13.jpg" alt="12月28日配图1">
+            </div>
+            <br>
+            <div class="entry-image">
+                <img src="extracted_zip4/14.jpg" alt="12月28日配图2">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/15.jpg" alt="12月28日配图3">
+            </div>
+        </div>
+
+        <div class="entry" id="jan10">
+            <div class="entry-date">1月10日 - 晴</div>
+            <div class="entry-content"><p><strong>我最喜欢的玩具</strong></p><p>我最喜欢的玩具是水枪，它是我在上篮球课的地方送的。  
+                我很喜欢它。因为它能喷出来，在夏天还可以"打水仗"。  
+                水枪喷出来的水花像一条线，一条长长的线，有的像雨，一场大大的雨，看起来非常好玩。  
+                但是我发现了一个问题。就是每次水没了的时候就得去接水。打水仗的时候就很费时间。  
+                我记得以前有很多水枪，但是现在都找不到了。</p></div>
+            <div class="entry-image">
+                <img src="extracted_zip4/16.jpg" alt="1月10日配图1">
+            </div>
+            <div class="entry-image">
+                <img src="extracted_zip4/17.jpg" alt="1月10日配图2">
+            </div>
+        </div>
+
+        <div class="afterword end-matter" id="afterword">
+            <h2>后记</h2>
+            <p>这本日记集记录了我从一年级到二年级的成长足迹，每一篇文字都是我内心世界的真实写照。从最初的简单描述，到后来能够编写完整的小故事，我感受到了自己的进步。</p>
+            <p>这些日记不仅记录了我的学习生活，还记录了我的想象力发展过程。我写过关于小动物的童话故事，记录了参观各种场所的经历，表达了对家人朋友的关爱，还抒发了对祖国的热爱。</p>
+            <p>感谢老师和家长对我的鼓励，让我能够坚持写日记，记录下这些珍贵的童年时光。我希望未来的自己能够继续热爱写作，用文字记录生活中的美好。</p>
+            <p>愿所有的小朋友都能像我一样，用心感受生活，用文字记录成长。</p>
+        </div>
+
+        <div class="afterword end-matter author-note" id="author">
+            <h2>关于作者</h2>
+            <div class="author-layout">
+                <figure class="author-photo-wrap">
+                    <img class="author-photo" src="about.jpg" alt="周清逸照片">
+                    <figcaption class="author-photo-caption">周清逸 · 作者</figcaption>
+                </figure>
+                <div class="author-text">
+                    <p>周清逸，<strong>郑州艾瑞德学校</strong>二年级学生，一个充满好奇心、善良、乐于助人的小男孩。</p>
+                    <p>他喜欢篮球、羽毛球、写作、阅读，热爱大自然，对周围的世界充满探索欲望。</p>
+                    <p>他的日记充满童真和想象力，展现了儿童纯真的内心世界，也记录了成长中的勇气与温暖。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 封尾 -->
+        <div class="cover-page" style="page-break-before: always;">
+            <div class="back-cover-container">
+                <!-- 星空背景 -->
+                <div class="stars">
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                </div>
+                
+                <!-- 太空星球 -->
+                <div class="planet planet-1"></div>
+                
+                <!-- 角落装饰 -->
+                <div class="corner-decoration corner-tl">⭐</div>
+                <div class="corner-decoration corner-tr">🚀</div>
+                <div class="corner-decoration corner-bl">🛸</div>
+                <div class="corner-decoration corner-br">🛰️</div>
+                
+                <div class="title-section">
+                    <div class="main-title">感谢阅读</div>
+                </div>
+                
+                <div class="content-section">
+                    <p>这本日记记录了我一年级下学期到二年级上学期的成长足迹</p>
+                    <p>感谢每一位陪伴我成长的老师、同学和家人</p>
+                    <p>愿每一个梦想都能在未来的天空中闪闪发光</p>
+                    <p>就像夜空中最美的那颗星</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.querySelector('.container');
+            if (!container) return;
+
+            const monthMap = {
+                1: '一月篇',
+                2: '二月篇',
+                3: '三月篇',
+                4: '四月篇',
+                5: '五月篇',
+                6: '六月篇',
+                7: '七月篇',
+                8: '八月篇',
+                9: '九月篇',
+                10: '十月篇',
+                11: '十一月篇',
+                12: '十二月篇'
+            };
+
+            const sportIcons = ['⚽', '🏀', '🏸', '🎾', '🏃'];
+
+            function inferSportIcon(contentText, dateText, entryIndex) {
+                const text = ((contentText || '') + ' ' + (dateText || '')).replace(/\s+/g, '');
+
+                const iconRules = [
+                    { re: /(篮球|投球|篮筐|三分|上篮)/, icon: '🏀' },
+                    { re: /(足球|踢球|射门|守门)/, icon: '⚽' },
+                    { re: /(羽毛球|球拍|扣杀)/, icon: '🏸' },
+                    { re: /(网球|发球)/, icon: '🎾' },
+                    { re: /(跑步|长跑|短跑|冲刺|运动会|接力|跳绳|爬山|长城)/, icon: '🏃' },
+                    { re: /(游泳|泳池|下水)/, icon: '🏊' },
+                    { re: /(露营|徒步|公园|春游|郊游)/, icon: '🥾' },
+                    { re: /(雪|滑|冰|雪仗)/, icon: '⛷️' }
+                ];
+
+                for (let i = 0; i < iconRules.length; i++) {
+                    if (iconRules[i].re.test(text)) {
+                        return iconRules[i].icon;
+                    }
+                }
+
+                return sportIcons[entryIndex % sportIcons.length];
+            }
+
+            function weatherSymbol(weatherText) {
+                if (!weatherText) return '☁';
+                if (/(晴|阳)/.test(weatherText)) return '☀';
+                if (/(雨|雷|雪)/.test(weatherText)) return '☂';
+                if (/(云|阴)/.test(weatherText)) return '☁';
+                return '☁';
+            }
+
+            const seenMonths = new Set();
+            const entries = Array.from(container.querySelectorAll('.entry'));
+
+            entries.forEach(function (entry, entryIndex) {
+                const dateEl = entry.querySelector('.entry-date');
+                const dateText = dateEl ? dateEl.textContent.trim() : '';
+                const contentEl = entry.querySelector('.entry-content');
+                const contentText = contentEl ? contentEl.textContent.trim() : '';
+
+                if (dateEl && !dateEl.querySelector('.entry-date-main')) {
+                    const dateMatch = dateText.match(/^(.+?)\s*[-－]\s*(.+)$/);
+                    if (dateMatch) {
+                        const weatherText = dateMatch[2].trim();
+                        const sport = inferSportIcon(contentText, dateText, entryIndex);
+                        dateEl.innerHTML =
+                            '<span class="entry-date-main">' + dateMatch[1].trim() + '</span>' +
+                            '<span class="entry-weather">' + weatherSymbol(weatherText) + ' ' + weatherText + '</span>' +
+                            '<span class="entry-sport-badge">' + sport + '</span>';
+                    } else {
+                        const sport = inferSportIcon(contentText, dateText, entryIndex);
+                        dateEl.innerHTML =
+                            '<span class="entry-date-main">' + dateText + '</span>' +
+                            '<span class="entry-sport-badge">' + sport + '</span>';
+                    }
+                }
+
+                if (contentEl) {
+                    let paragraphs = Array.from(contentEl.children).filter(function (node) {
+                        return node.tagName === 'P';
+                    });
+
+                    if (paragraphs.length === 0 && contentEl.innerHTML.trim()) {
+                        const p = document.createElement('p');
+                        p.innerHTML = contentEl.innerHTML.trim();
+                        contentEl.innerHTML = '';
+                        contentEl.appendChild(p);
+                        paragraphs = [p];
+                    }
+
+                    paragraphs.forEach(function (p) {
+                        p.classList.remove('lead-paragraph');
+                    });
+
+                    const leadParagraph = paragraphs.find(function (p) {
+                        const text = p.textContent.replace(/\s+/g, '').trim();
+                        if (!text) return false;
+                        const strongOnly = p.children.length === 1 && p.firstElementChild && p.firstElementChild.tagName === 'STRONG';
+                        return !strongOnly;
+                    }) || paragraphs.find(function (p) {
+                        return p.textContent.replace(/\s+/g, '').trim();
+                    });
+
+                    if (leadParagraph) {
+                        leadParagraph.classList.add('lead-paragraph');
+                    }
+                }
+
+                if (dateText) {
+                    const match = dateText.match(/(\d{1,2})月/);
+                    if (match) {
+                        const month = Number(match[1]);
+                        if (!seenMonths.has(month)) {
+                            seenMonths.add(month);
+                            const chapterPage = document.createElement('div');
+                            chapterPage.className = 'chapter-page';
+                            chapterPage.innerHTML =
+                                '<div class="chapter-kicker">成长纪事</div>' +
+                                '<div class="chapter-title">' + (monthMap[month] || (month + '月篇')) + '</div>' +
+                                '<div class="chapter-subtitle">周清逸 · 我的成长日记</div>';
+                            entry.parentNode.insertBefore(chapterPage, entry);
+                        }
+                    }
+                }
+
+                const images = Array.from(entry.querySelectorAll('.entry-image img'));
+                images.forEach(function (img, index) {
+                    const wrapper = img.closest('.entry-image');
+                    if (!wrapper || wrapper.querySelector('.image-caption')) return;
+
+                    const altText = (img.getAttribute('alt') || '')
+                        .replace(/配图\d*/g, '')
+                        .replace(/配图/g, '')
+                        .trim();
+
+                    const caption = document.createElement('div');
+                    caption.className = 'image-caption';
+
+                    const dateOnlyMatch = (dateText || '').match(/^(\d{1,2}月\d{1,2}日)/);
+                    const dateOnly = dateOnlyMatch ? dateOnlyMatch[1] : '';
+                    let captionAltText = altText;
+
+                    if (dateOnly && captionAltText.startsWith(dateOnly)) {
+                        captionAltText = captionAltText
+                            .slice(dateOnly.length)
+                            .replace(/^[\s\-－:：·]+/, '')
+                            .trim();
+                    }
+
+                    if (dateText && captionAltText) {
+                        caption.textContent = dateText + ' · ' + captionAltText;
+                    } else if (dateText) {
+                        caption.textContent = dateText + ' · 原稿 ' + (index + 1);
+                    } else if (captionAltText) {
+                        caption.textContent = captionAltText;
+                    } else {
+                        caption.textContent = '原稿 ' + (index + 1);
+                    }
+
+                    wrapper.appendChild(caption);
+                });
+            });
+
+            function refreshTocPageNumbers() {
+                const pageBlocks = Array.from(container.children).filter(function (el) {
+                    return el.matches('.toc, .foreword, .chapter-page, .entry, .afterword');
+                });
+
+                const pageMap = new Map();
+                let pageNumber = 1;
+                pageBlocks.forEach(function (block) {
+                    pageMap.set(block, pageNumber);
+                    pageNumber += 1;
+                });
+
+                function getRawPageById(id) {
+                    const node = document.getElementById(id);
+                    if (!node) return null;
+                    const block = node.closest('.foreword, .chapter-page, .entry, .afterword, .toc');
+                    if (!block || !pageMap.has(block)) return null;
+                    return pageMap.get(block);
+                }
+
+                function getEntryMonth(entryEl) {
+                    if (!entryEl) return null;
+                    const dateMain = entryEl.querySelector('.entry-date-main');
+                    const dateNode = entryEl.querySelector('.entry-date');
+                    const dateText = (dateMain ? dateMain.textContent : (dateNode ? dateNode.textContent : '')).trim();
+                    const match = dateText.match(/(\d{1,2})月/);
+                    return match ? Number(match[1]) : null;
+                }
+
+                function getEntryPages(entryEl) {
+                    if (!entryEl) return 1;
+                    const imageCount = entryEl.querySelectorAll('.entry-image img').length;
+                    return Math.max(1, imageCount);
+                }
+
+                const rulePageByBlock = new Map();
+                const forewordBlock = container.querySelector('#foreword');
+                if (forewordBlock) {
+                    rulePageByBlock.set(forewordBlock, 1);
+                }
+
+                const orderedEntries = Array.from(container.querySelectorAll('.entry'));
+                if (orderedEntries.length > 0) {
+                    rulePageByBlock.set(orderedEntries[0], 3);
+                }
+                if (orderedEntries.length > 1) {
+                    rulePageByBlock.set(orderedEntries[1], 4);
+
+                    let currentPage = 4 + getEntryPages(orderedEntries[1]);
+                    let previousMonth = getEntryMonth(orderedEntries[1]);
+
+                    for (let i = 2; i < orderedEntries.length; i++) {
+                        const entry = orderedEntries[i];
+                        const month = getEntryMonth(entry);
+
+                        if (month !== null && previousMonth !== null && month !== previousMonth) {
+                            currentPage += 1;
+                        }
+
+                        rulePageByBlock.set(entry, currentPage);
+                        currentPage += getEntryPages(entry);
+                        previousMonth = month;
+                    }
+                }
+
+                const afterwordBlocks = Array.from(container.querySelectorAll('.afterword'));
+                if (orderedEntries.length > 0 && afterwordBlocks.length > 0) {
+                    const lastEntry = orderedEntries[orderedEntries.length - 1];
+                    const lastEntryStart = rulePageByBlock.get(lastEntry);
+                    if (lastEntryStart != null) {
+                        const afterwordStart = lastEntryStart + getEntryPages(lastEntry);
+                        rulePageByBlock.set(afterwordBlocks[0], afterwordStart);
+                        if (afterwordBlocks.length > 1) {
+                            rulePageByBlock.set(afterwordBlocks[1], afterwordStart + 1);
+                        }
+                    }
+                }
+
+                function getCalibratedPageForBlock(targetBlock) {
+                    if (!targetBlock) return null;
+
+                    if (rulePageByBlock.has(targetBlock)) {
+                        return rulePageByBlock.get(targetBlock);
+                    }
+
+                    const targetIndex = pageBlocks.indexOf(targetBlock);
+                    if (targetIndex < 0) return null;
+
+                    for (let i = targetIndex; i >= 0; i--) {
+                        const baseBlock = pageBlocks[i];
+                        let baseValue = null;
+
+                        if (rulePageByBlock.has(baseBlock)) {
+                            baseValue = rulePageByBlock.get(baseBlock);
+                        }
+
+                        if (baseValue != null) {
+                            const delta = pageMap.get(targetBlock) - pageMap.get(baseBlock);
+                            return Math.max(1, baseValue + delta);
+                        }
+                    }
+
+                    return pageMap.has(targetBlock) ? Math.max(1, pageMap.get(targetBlock)) : null;
+                }
+
+                const tocItems = Array.from(container.querySelectorAll('.toc li'));
+                tocItems.forEach(function (li) {
+                    const link = li.querySelector('a[href^="#"]');
+
+                    li.querySelectorAll('.toc-leader, .toc-page').forEach(function (node) {
+                        node.remove();
+                    });
+
+                    let pageValue = null;
+
+                    if (link) {
+                        const targetId = link.getAttribute('href').slice(1);
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            const targetBlock = target.closest('.foreword, .chapter-page, .entry, .afterword, .toc');
+                            pageValue = getCalibratedPageForBlock(targetBlock);
+                            if (pageValue == null && targetBlock && pageMap.has(targetBlock)) {
+                                pageValue = Math.max(1, pageMap.get(targetBlock));
+                            }
+                        }
+                    }
+
+                    const leader = document.createElement('span');
+                    leader.className = 'toc-leader';
+
+                    const page = document.createElement('span');
+                    page.className = 'toc-page';
+                    page.textContent = pageValue == null ? '--' : String(pageValue).padStart(2, '0');
+
+                    li.appendChild(leader);
+                    li.appendChild(page);
+                });
+            }
+
+            refreshTocPageNumbers();
+            window.requestAnimationFrame(refreshTocPageNumbers);
+            setTimeout(refreshTocPageNumbers, 120);
+            window.addEventListener('load', refreshTocPageNumbers);
+        });
+    </script>
+</body>
+</html>
