@@ -1323,7 +1323,7 @@
             position: relative;
             z-index: 4;
             margin-top: 20px;
-            padding: 0 30px;
+            padding: 0 30px 120px;
             text-align: center;
         }
         
@@ -1410,6 +1410,153 @@
             font-size: 17px;
             line-height: 1.8;
             margin: 15px 0;
+        }
+
+        .back-cover-qr {
+            position: absolute;
+            right: 22px;
+            bottom: 22px;
+            z-index: 7;
+            width: 102px;
+            padding: 8px 8px 6px;
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        .back-cover-qr-title {
+            font-size: 11px;
+            color: #3a4f72;
+            margin-bottom: 6px;
+            line-height: 1.2;
+            letter-spacing: 0.3px;
+        }
+
+        .back-cover-qr-box {
+            width: 86px;
+            height: 86px;
+            margin: 0 auto;
+            border: 2px solid #2f3f5e;
+            background:
+                repeating-linear-gradient(45deg, #f4f7fb 0 6px, #ffffff 6px 12px);
+            color: #415675;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            line-height: 1.2;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 6px;
+        }
+
+        .back-cover-qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: #fff;
+        }
+
+        @media print {
+            .back-cover-qr {
+                right: 10mm;
+                bottom: 10mm;
+                box-shadow: none;
+                border: 1px solid rgba(47, 63, 94, 0.28);
+                background: rgba(255, 255, 255, 0.98);
+            }
+
+            .back-to-top,
+            .bgm-player,
+            .bgm-toggle {
+                display: none !important;
+            }
+        }
+
+        .bgm-player {
+            position: fixed;
+            left: -9999px;
+            bottom: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .bgm-player iframe {
+            width: 100%;
+            height: 52px;
+            border: 0;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .bgm-toggle {
+            position: fixed;
+            left: 14px;
+            bottom: 14px;
+            z-index: 9998;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 76, 108, 0.45);
+            background: rgba(255, 255, 255, 0.92);
+            color: #2f4770;
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(10, 20, 35, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .bgm-toggle.playing {
+            background: rgba(47, 71, 112, 0.95);
+            color: #fff;
+        }
+
+        @media screen and (max-width: 768px) {
+            .bgm-toggle {
+                left: 10px;
+                bottom: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 9999;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 76, 108, 0.45);
+            background: rgba(255, 255, 255, 0.92);
+            color: #2f4770;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(10, 20, 35, 0.2);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .back-to-top.show {
+            display: inline-flex;
+        }
+
+        .back-to-top:hover {
+            background: rgba(255, 255, 255, 0.98);
         }
     </style>
     
@@ -2168,14 +2315,80 @@
                     <p>愿每一个梦想都能在未来的天空中闪闪发光</p>
                     <p>就像夜空中最美的那颗星</p>
                 </div>
+
+                <div class="back-cover-qr">
+                    <div class="back-cover-qr-title">扫描查看电子版</div>
+                    <div class="back-cover-qr-box">
+                        <img src="https___laxian.github.io_zqy_diary.html.png" alt="电子版二维码">
+                    </div>
+                </div>
                 
             </div>
         </div>
     </div>
+
+    <button class="back-to-top" id="backToTop" type="button" aria-label="回到顶部" title="回到顶部">↑</button>
+
+    <button class="bgm-toggle" id="bgmToggle" type="button" aria-label="音乐开关" title="音乐开关">♪</button>
+
+    <div class="bgm-player" aria-label="背景音乐播放器">
+        <iframe id="bgmFrame" frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="about:blank" data-src="https://music.163.com/outchain/player?type=2&id=1849013049&auto=0&height=32" allow="autoplay; encrypted-media"></iframe>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const container = document.querySelector('.container');
             if (!container) return;
+
+            const backToTopButton = document.getElementById('backToTop');
+            if (backToTopButton) {
+                const toggleBackToTop = function () {
+                    const top = window.scrollY || document.documentElement.scrollTop || 0;
+                    if (top > 320) {
+                        backToTopButton.classList.add('show');
+                    } else {
+                        backToTopButton.classList.remove('show');
+                    }
+                };
+
+                window.addEventListener('scroll', toggleBackToTop, { passive: true });
+                toggleBackToTop();
+
+                backToTopButton.addEventListener('click', function () {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            const bgmFrame = document.getElementById('bgmFrame');
+            const bgmToggle = document.getElementById('bgmToggle');
+            let bgmLoaded = false;
+            let bgmPlaying = false;
+            if (bgmFrame && bgmToggle) {
+                bgmToggle.addEventListener('click', function () {
+                    if (!bgmPlaying) {
+                        const baseSrc = bgmFrame.getAttribute('data-src');
+                        if (baseSrc) {
+                            const playSrc = baseSrc.includes('auto=')
+                                ? baseSrc.replace(/auto=\d+/, 'auto=1')
+                                : baseSrc + '&auto=1';
+
+                            if (!bgmLoaded || bgmFrame.getAttribute('src') !== playSrc) {
+                                bgmFrame.setAttribute('src', playSrc);
+                            }
+                            bgmLoaded = true;
+                        }
+                        bgmPlaying = true;
+                        bgmToggle.classList.add('playing');
+                        bgmToggle.textContent = '■';
+                    } else {
+                        bgmFrame.setAttribute('src', 'about:blank');
+                        bgmPlaying = false;
+                        bgmLoaded = false;
+                        bgmToggle.classList.remove('playing');
+                        bgmToggle.textContent = '♪';
+                    }
+                });
+            }
 
             const monthMap = {
                 1: '一月篇',
